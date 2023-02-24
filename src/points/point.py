@@ -17,3 +17,6 @@ class Point:
     def generate_random(self, constraint):
         for i in range(self.dimension):
             self.set(i, random.randint(-constraint, constraint))
+
+    def get_value_between(self, other, axis=0):
+        return (self.get(axis) - other.get(axis)) / 2
