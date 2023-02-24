@@ -2,6 +2,8 @@ import points.points as ps
 import platform
 import points.point as p
 import lib.linalg as la
+import visualizer.visualizer as vs
+
 if __name__ == "__main__":
     ps1 = ps.Points(3)
 
@@ -40,3 +42,8 @@ if __name__ == "__main__":
     print(_min)
     print(p1.coordinate)
     print(p2.coordinate)
+    
+    pointArray = vs.changeToNumpy(ps1)
+    vs.visualize(pointArray, p1, p2)
+    
+    
