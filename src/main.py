@@ -1,4 +1,5 @@
 import points.points as ps
+import platform 
 
 if __name__ == "__main__":
     ps1 = ps.Points(3)
@@ -8,3 +9,8 @@ if __name__ == "__main__":
     print(_min)
     print(p1.coordinate)
     print(p2.coordinate)
+    print("----------------------")
+    ps1.sort(0, ps1.get_point_count()-1)
+    ps1.view()
+    
+    
