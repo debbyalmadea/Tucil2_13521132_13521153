@@ -22,7 +22,10 @@ class Points:
         """
             return array of points from start_id to end_id (inclusive)
         """
-        return self.__points[start_id:end_id + 1]
+        if start_id <= end_id:
+            return self.__points[start_id:end_id + 1]
+        else:
+            return []
 
     def get_dimension(self):
         return self.__dimension
@@ -32,17 +35,25 @@ class Points:
 
     # setter
     def set_points(self, points):
+        """
+            set points (array)
+        """
         self.__points = points
         self.__point_count = len(points)
-    
 
     def set_empty(self):
+        """
+            set points to empty
+        """
         self.__points = []
         self.__point_count = 0
 
     # other function
 
     def generate_random(self, point_count, constraint):
+        """
+            generate random points
+        """
         self.set_empty()
         _points = []
         for i in range(point_count):
@@ -54,40 +65,50 @@ class Points:
         # self.sort()
 
     def add(self, point):
+        """
+            add point to points
+        """
         self.__points.append(point)
         self.__point_count += 1
-        
-    def partition(self, axis, lowIdx, highIdx):
-        #get 1-3
-        pivot = self.get_point(highIdx).get(axis) #Pivot x terakhir
+
+    def __partition(self, lowIdx, highIdx, axis):
+        """
+            partition used for quick sort
+        """
+        # get 1-3
+        pivot = self.get_point(highIdx).get(axis)  # Pivot x terakhir
         i = lowIdx - 1
         for k in range(lowIdx, highIdx):
             if self.get_point(k).get(axis) <= pivot:
                 i += 1
                 self.__points[i], self.__points[k] = self.__points[k], self.__points[i]
-        
-        self.__points[i+1], self.__points[highIdx] = self.__points[highIdx], self.__points[i+1] 
+
+        self.__points[i+1], self.__points[highIdx] = self.__points[highIdx], self.__points[i+1]
         return i+1
-        
-    def sort(self, axis, lowId, highIdx):
+
+    def sort(self, lowId, highIdx, axis=0):
+        """
+            sort points by axis using quick sort
+        """
         i = lowId
         j = highIdx
         if i < j:
-            partitionId = self.partition(axis, lowId, highIdx)
-            self.sort(axis, i, partitionId-1)
-            self.sort(axis, partitionId+1, j)
+            partitionId = self.__partition(lowId, highIdx, axis)
+            self.sort(i, partitionId-1, axis)
+            self.sort(partitionId+1, j, axis)
 
     def __search_fo(self, low, high, value, axis):
         """
             prereq: points are sorted ascending by axis
 
             return index of first occurence of value in axis using binary search.
+            if there is no value, return first occurence of element more than value
         """
 
-        if (high >= low):
+        if (high >= low and low < self.__point_count):
             mid = low + (high - low) // 2
             if self.get_point(mid).get(axis) == value:
-                if mid == 0 or self.get_point(mid - 1).get(axis) != value:
+                if mid == 0 or self.get_point(mid - 1).get(axis) < value:
                     return mid
                 else:
                     return self.__search_fo(low, high - 1, value, axis)
@@ -96,6 +117,9 @@ class Points:
                     return self.__search_fo(low, mid - 1, value, axis)
                 else:
                     return self.__search_fo(mid + 1, high, value, axis)
+        # print("===========FO NOT FOUND", low, high, "VALUE:", value)
+        # self.view()
+
         return low
 
     def __search_lo(self, low, high, value, axis):
@@ -103,11 +127,13 @@ class Points:
             prereq: points are sorted ascending by axis
 
             return index of last occurence of value in axis using binary search.
+            if there is no value, return last occurence of element less than value
         """
-        if (high >= low):
+        if (high >= low and high < self.__point_count):
             mid = low + (high - low) // 2
+            # print(self.__point_count, mid)
             if self.get_point(mid).get(axis) == value:
-                if mid == self.get_point_count() - 1 or self.get_point(mid + 1).get(axis) != value:
+                if mid == self.get_point_count() - 1 or self.get_point(mid + 1).get(axis) > value:
                     return mid
                 else:
                     return self.__search_lo(low, high + 1, value, axis)
@@ -117,6 +143,8 @@ class Points:
                 else:
                     return self.__search_lo(mid + 1, high, value, axis)
 
+        # print("===========LO NOT FOUND", low, high, "VALUE:", value)
+        # self.view()
         return high
 
     def search(self, value, kind="first", axis=0):
@@ -125,28 +153,111 @@ class Points:
         """
         if kind == "first":
             return self.__search_fo(0, self.get_point_count() - 1, value, axis)
-        else:
+        elif kind == "last":
             return self.__search_lo(0, self.get_point_count() - 1, value, axis)
 
     def divide(self):
         """
-            return two Points: first half of array of point and last half of array of point
+            return tuple
+            1. array of integer size two representing start and end index of
+               the first half of array points 
+            2. array of integer size two representing start and end index of
+               the second half of array points
         """
-        left = Points(self.__dimension)
-        right = Points(self.__dimension)
-        left.set_points(
-            self.get_points_within_id(0, self.__point_count // 2 - 1))
-        right.set_points(
-            self.get_points_within_id(self.__point_count // 2, self.__point_count - 1))
-        return left, right
+        # left = Points(self.__dimension)
+        # right = Points(self.__dimension)
+        # left.set_points(
+        #     self.get_points_within_id(0, self.__point_count // 2 - 1))
+        # right.set_points(
+        #     self.get_points_within_id(self.__point_count // 2, self.__point_count - 1))
+        left_sid = 0
+        left_eid = self.__point_count // 2 - 1
+        right_sid = self.__point_count // 2
+        right_eid = self.__point_count - 1
 
-    def __find_closest_pair_with(self, other, distance, axis=0):
-        pass
+        return [left_sid, left_eid], [right_sid, right_eid]
+
+    def __find_closest_pair_with(self, _point: point.Point, distance, pseudo_line, axis=0):
+        """
+            return point having closest distance with _point
+        """
+        _min = distance
+        min_p1 = point.Point(self.__dimension)
+        min_p2 = point.Point(self.__dimension)
+
+        target_ps = []
+        for i in range(self.__dimension):
+            if i == axis:
+                continue
+            else:
+                copy_ps = Points(self.__dimension)
+                copy_ps.set_points(self.get_points())
+                copy_ps.sort(0, copy_ps.get_point_count() - 1, i)
+
+                fl_id = copy_ps.search(
+                    int(_point.get(i) - distance), kind="first", axis=i)
+                fr_id = copy_ps.search(
+                    int(_point.get(i) + distance), kind="last", axis=i)
+                # print("TARGET", fl_id, fr_id)
+                # print(_point.coordinate)
+                # self.view()
+                target_ps = self.get_points_within_id(fl_id, fr_id)
+
+        for i in range(len(target_ps)):
+            _norm = la.norm(_point, target_ps[i])
+            if _norm < _min:
+                _min = _norm
+                min_p1 = target_ps[i]
+                min_p2 = _point
+
+        return _min, min_p1, min_p2
+
+    def __find_closest_pair_grey(self, distance, left_id, right_id, axis=0):
+        """
+            return closest pair of point in grey area, an area +- distance 
+            from pseudo line from all axes
+        """
+        _min = distance
+        min_p1 = point.Point(self.__dimension)
+        min_p2 = point.Point(self.__dimension)
+
+        left_closest = self.get_point(left_id[1])
+        right_closest = self.get_point(right_id[0])
+        pseudo_line = left_closest.get(
+            axis) + abs(left_closest.get_value_between(right_closest))
+
+        # print("LEFT CLOSEST", left_closest.coordinate)
+        # print("RIGHT CLOSEST", right_closest.coordinate)
+        # print("PSEUDO LINE:", pseudo_line)
+
+        gfl_id = self.search(int(pseudo_line - distance), kind="first")
+        gfr_id = self.search(int(pseudo_line + distance), kind="last")
+
+        grey_l = Points(self.__dimension)
+        grey_l.set_points(self.get_points_within_id(gfl_id, left_id[1]))
+
+        grey_r = Points(self.__dimension)
+        grey_r.set_points(self.get_points_within_id(right_id[0], gfr_id))
+
+        # print("GREY L")
+        # grey_l.view()
+        # print("GREY R")
+        # grey_r.view()
+        for _point in grey_l.__points:
+            _min_temp, min_p1_temp, min_p2_temp = grey_r.__find_closest_pair_with(
+                _point, distance, pseudo_line)
+            if _min_temp < _min:
+                _min = _min_temp
+                min_p1 = min_p1_temp
+                min_p2 = min_p2_temp
+
+        return _min, min_p1, min_p2
 
     def __find_closest_pair_dnc(self):
         """
             finding closest pair of points using divide and conquer algorithm
         """
+
         if self.get_point_count() == 2:
             return la.norm(self.get_point(0), self.get_point(1)), self.get_point(0), self.get_point(1)
         else:
@@ -154,13 +265,27 @@ class Points:
             _min_p1 = point.Point(self.__dimension)
             _min_p2 = point.Point(self.__dimension)
 
-            left, right = self.divide()
+            left_id, right_id = self.divide()
+            left = Points(self.__dimension)
+            left.set_points(self.get_points_within_id(left_id[0], left_id[1]))
+
+            right = Points(self.__dimension)
+            right.set_points(self.get_points_within_id(
+                right_id[0], right_id[1]))
+            # print("divided")
+            # print("left")
+            # left.view()
+            # print("right")
+            # right.view()
+
             left_min, left_p1, left_p2 = left.__find_closest_pair_dnc()
             right_min, right_p1, right_p2 = right.__find_closest_pair_dnc()
 
-            left_closest = left.get_point(left.get_point_count() - 1)
-            right_closest = right.get_point(0)
-            pseudo_line = left_closest.get_value_between(right_closest)
+            # print("left min", left_min)
+            # print(left_p1.coordinate, left_p2.coordinate)
+
+            # print("right min", right_min)
+            # print(right_p1.coordinate, right_p2.coordinate)
 
             if (left_min < right_min):
                 _min = left_min
@@ -171,26 +296,16 @@ class Points:
                 _min_p1 = right_p1
                 _min_p2 = right_p2
 
-            # closest pair in grey area
-            gfl_id = left.search(pseudo_line - _min, kind="first")
-            gfr_id = right.search(pseudo_line - _min, kind="last")
+            _min_grey, min_p1_grey, min_p2_grey = self.__find_closest_pair_grey(
+                _min, left_id, right_id)
 
-            grey_l = Points(self.__dimension)
-            grey_l.set_points(left.get_points_within_id(
-                gfl_id, left.get_point_count() - 1))
+            # print("grey min", _min_grey)
 
-            grey_r = Points(self.__dimension)
-            grey_r.set_points(right.get_points_within_id(
-                gfr_id, right.get_point_count() - 1))
+            if _min_grey < _min:
+                _min = _min_grey
+                _min_p1 = min_p1_grey
+                _min_p2 = min_p2_grey
 
-            grey_l.__find_closest_pair_with(grey_r, _min)
-
-            # print("left")
-            # left.view()
-            # print("right")
-            # right.view()
-
-            # print(pseudo_line)
             return _min, _min_p1, _min_p2
 
     def __find_closest_pair_bf(self):
@@ -210,12 +325,15 @@ class Points:
 
     def find_closest_pair(self, kind="dnc"):
         """
-            finding closest pair of points. parameter kind is the algorithm used. 
+            finding closest pair of points. parameter kind is the algorithm used.
             default is "dnc" for divide and conquer, another one is "bf" for brute force
         """
         if kind == "bf":
             return self.__find_closest_pair_bf()
         elif kind == "dnc":
+            self.sort(0, self.get_point_count() - 1)
+            print("sorted")
+            self.view()
             return self.__find_closest_pair_dnc()
 
     def view(self):
