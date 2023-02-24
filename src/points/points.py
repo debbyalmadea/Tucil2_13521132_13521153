@@ -54,24 +54,25 @@ class Points:
         self.__points.append(point)
         self.__point_count += 1
         
-    def partition(self, lowIdx, highIdx):
-        pivot = self.get_point(highIdx).get(0) #Pivot x terakhir
+    def partition(self, axis, lowIdx, highIdx):
+        #get 1-3
+        pivot = self.get_point(highIdx).get(axis) #Pivot x terakhir
         i = lowIdx - 1
         for k in range(lowIdx, highIdx):
-            if self.get_point(k).get(0) <= pivot:
+            if self.get_point(k).get(axis) <= pivot:
                 i += 1
                 self.__points[i], self.__points[k] = self.__points[k], self.__points[i]
         
         self.__points[i+1], self.__points[highIdx] = self.__points[highIdx], self.__points[i+1] 
         return i+1
         
-    def sort(self, lowId, highIdx):
+    def sort(self, axis, lowId, highIdx):
         i = lowId
         j = highIdx
         if i < j:
-            partitionId = self.partition(lowId, highIdx)
-            self.sort(i, partitionId-1)
-            self.sort(partitionId+1, j)
+            partitionId = self.partition(axis, lowId, highIdx)
+            self.sort(axis, i, partitionId-1)
+            self.sort(axis, partitionId+1, j)
 
     def search(self, values, axes):
         pass

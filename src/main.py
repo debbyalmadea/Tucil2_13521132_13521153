@@ -10,7 +10,11 @@ if __name__ == "__main__":
     print(p1.coordinate)
     print(p2.coordinate)
     print("----------------------")
-    ps1.sort(0, ps1.get_point_count()-1)
+    print(ps1.get_point(4).get(2)) 
+    ps1.sort(2, 0, ps1.get_point_count()-1)
     ps1.view()
+    #Make throw exception
+
+    
     
     
