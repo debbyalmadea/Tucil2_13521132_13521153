@@ -1,6 +1,11 @@
+import random
+
+
 class Point:
-    def __init__(self, dimension, coordinate):
+    def __init__(self, dimension, coordinate=[]):
         self.dimension = dimension
+        if (len(coordinate) == 0):
+            coordinate = [0 for i in range(dimension)]
         self.coordinate = coordinate
 
     def get(self, axis):
@@ -9,4 +14,6 @@ class Point:
     def set(self, axis, value):
         self.coordinate[axis] = value
 
-    pass
+    def generate_random(self, constraint):
+        for i in range(self.dimension):
+            self.set(i, random.randint(-constraint, constraint))

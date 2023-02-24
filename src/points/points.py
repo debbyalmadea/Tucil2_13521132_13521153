@@ -1,4 +1,4 @@
-import point
+import points.point as point
 import lib.linalg as la
 
 
@@ -7,10 +7,12 @@ class Points:
         self.__dimension = dimension
         self.__points = points
         self.__point_count = 0
-        self.sort()
 
     # getter
     def get_points(self):
+        """
+            Return array of point
+        """
         return self.__points
 
     def get_point(self, id):
@@ -29,13 +31,24 @@ class Points:
     def set_points(self, points):
         self.__points = points
         self.__point_count = len(points)
-        self.__dimension = len(points[0])
-        self.sort()
 
-    def set_points_random(self):
-        pass
+    def set_empty(self):
+        self.__points = []
+        self.__point_count = 0
 
     # other function
+
+    def generate_random(self, point_count, constraint):
+        self.set_empty()
+        _points = []
+        for i in range(point_count):
+            _point = point.Point(self.get_dimension())
+            _point.generate_random(constraint)
+            _points.append(_point)
+        self.set_points(_points)
+
+        # self.sort()
+
     def add(self, point):
         self.__points.append(point)
         self.__point_count += 1
@@ -62,7 +75,25 @@ class Points:
         pass
 
     def __find_closest_pair_bf(self):
-        pass
+        """
+            Finding closest pair of points using brute force algorithm
+        """
+        _min = 99999999
+        _min_id = [-1, -1]
+        for i in range(self.__point_count):
+            for j in range(i + 1, self.__point_count):
+                _norm = la.norm(self.get_point(i), self.get_point(j))
+                if (_norm < _min):
+                    _min = _norm
+                    _min_id = [i, j]
+
+        return _min, self.get_point(_min_id[0]), self.get_point(_min_id[1])
 
     def find_closest_pair(self, kind="dnc"):
+        if kind == "bf":
+            return self.__find_closest_pair_bf()
         pass
+
+    def view(self):
+        for i in range(self.__point_count):
+            print(self.get_point(i).coordinate)
