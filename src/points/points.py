@@ -186,7 +186,6 @@ class Points:
         min_p1 = point.Point(self.__dimension)
         min_p2 = point.Point(self.__dimension)
 
-        left_closest = self.get_point(left_id[1])
         right_closest = self.get_point(right_id[0])
         # pseudo_line = left_closest.get(
         #     axis) + abs(left_closest.get_value_between(right_closest))
@@ -245,8 +244,9 @@ class Points:
         """
             finding closest pair of points using divide and conquer algorithm
         """
-
-        if self.get_point_count() == 2:
+        if self.get_point_count() == 1:
+            return 2e9, self.get_point(0), self.get_point(0)
+        elif self.get_point_count() == 2:
             # print("NORM")
 
             return la.norm(self.get_point(0), self.get_point(1)), self.get_point(0), self.get_point(1)
@@ -302,7 +302,7 @@ class Points:
         """
             finding closest pair of points using brute force algorithm
         """
-        _min = 1000000000
+        _min = 2e9
         _min_id = [-1, -1]
         for i in range(self.__point_count):
             for j in range(i + 1, self.__point_count):
