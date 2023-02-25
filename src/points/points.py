@@ -160,7 +160,7 @@ class Points:
         """
             return tuple
             1. array of integer size two representing start and end index of
-               the first half of array points 
+               the first half of array points
             2. array of integer size two representing start and end index of
                the second half of array points
         """
@@ -177,44 +177,9 @@ class Points:
 
         return [left_sid, left_eid], [right_sid, right_eid]
 
-    def __find_closest_pair_with(self, _point: point.Point, distance, pseudo_line, axis=0):
-        """
-            return point having closest distance with _point
-        """
-        _min = distance
-        min_p1 = point.Point(self.__dimension)
-        min_p2 = point.Point(self.__dimension)
-
-        target_ps = []
-        for i in range(self.__dimension):
-            if i == axis:
-                continue
-            else:
-                copy_ps = Points(self.__dimension)
-                copy_ps.set_points(self.get_points())
-                copy_ps.sort(0, copy_ps.get_point_count() - 1, i)
-
-                fl_id = copy_ps.search(
-                    int(_point.get(i) - distance), kind="first", axis=i)
-                fr_id = copy_ps.search(
-                    int(_point.get(i) + distance), kind="last", axis=i)
-                # print("TARGET", fl_id, fr_id)
-                # print(_point.coordinate)
-                # self.view()
-                target_ps = self.get_points_within_id(fl_id, fr_id)
-
-        for i in range(len(target_ps)):
-            _norm = la.norm(_point, target_ps[i])
-            if _norm < _min:
-                _min = _norm
-                min_p1 = target_ps[i]
-                min_p2 = _point
-
-        return _min, min_p1, min_p2
-
     def __find_closest_pair_grey(self, distance, left_id, right_id, axis=0):
         """
-            return closest pair of point in grey area, an area +- distance 
+            return closest pair of point in grey area, an area +- distance
             from pseudo line from all axes
         """
         _min = distance
@@ -223,33 +188,56 @@ class Points:
 
         left_closest = self.get_point(left_id[1])
         right_closest = self.get_point(right_id[0])
-        pseudo_line = left_closest.get(
-            axis) + abs(left_closest.get_value_between(right_closest))
+        # pseudo_line = left_closest.get(
+        #     axis) + abs(left_closest.get_value_between(right_closest))
 
         # print("LEFT CLOSEST", left_closest.coordinate)
         # print("RIGHT CLOSEST", right_closest.coordinate)
         # print("PSEUDO LINE:", pseudo_line)
 
-        gfl_id = self.search(int(pseudo_line - distance), kind="first")
-        gfr_id = self.search(int(pseudo_line + distance), kind="last")
+        gfl_id = self.search(
+            int(right_closest.get(0) - distance), kind="first")
+        # gfr_id = self.search(int(left_closest.get(0) + distance), kind="last")
 
         grey_l = Points(self.__dimension)
         grey_l.set_points(self.get_points_within_id(gfl_id, left_id[1]))
 
-        grey_r = Points(self.__dimension)
-        grey_r.set_points(self.get_points_within_id(right_id[0], gfr_id))
+        # grey_r = Points(self.__dimension)
+        # grey_r.set_points(self.get_points_within_id(right_id[0], gfr_id))
 
-        # print("GREY L")
+        # print("=========GREY L")
         # grey_l.view()
         # print("GREY R")
         # grey_r.view()
+        # print("DISTANCE")
+        # print(distance)
         for _point in grey_l.__points:
-            _min_temp, min_p1_temp, min_p2_temp = grey_r.__find_closest_pair_with(
-                _point, distance, pseudo_line)
-            if _min_temp < _min:
-                _min = _min_temp
-                min_p1 = min_p1_temp
-                min_p2 = min_p2_temp
+            # print("===================POINT")
+            # print(_point.coordinate)
+            grey_r_id = self.search(
+                int(_point.get(0) + _min), kind="last")
+            grey_r = Points(self.__dimension)
+            grey_r.set_points(self.get_points_within_id(
+                right_id[0],  grey_r_id))
+            # print("TARGET END", grey_r_id)
+            # print("==========================TARGET")
+            for i in range(grey_r.__point_count):
+                if not grey_r.__points[i].is_diff_within_distance(_point, _min):
+                    continue
+                _norm = la.norm(_point, grey_r.__points[i])
+                # print(grey_r.__points[i].coordinate)
+                # print("NORM", _norm)
+                # print("MIN", _min)
+                if _norm < _min:
+                    _min = _norm
+                    min_p1 = grey_r.__points[i]
+                    min_p2 = _point
+            # _min_temp, min_p1_temp, min_p2_temp = grey_r.__find_closest_pair_with(
+            #     _point, _min)
+            # if _min_temp < _min:
+            #     _min = _min_temp
+            #     min_p1 = min_p1_temp
+            #     min_p2 = min_p2_temp
 
         return _min, min_p1, min_p2
 
@@ -259,6 +247,8 @@ class Points:
         """
 
         if self.get_point_count() == 2:
+            # print("NORM")
+
             return la.norm(self.get_point(0), self.get_point(1)), self.get_point(0), self.get_point(1)
         else:
             _min = 0
@@ -312,7 +302,7 @@ class Points:
         """
             finding closest pair of points using brute force algorithm
         """
-        _min = 99999999
+        _min = 1000000000
         _min_id = [-1, -1]
         for i in range(self.__point_count):
             for j in range(i + 1, self.__point_count):
@@ -332,8 +322,8 @@ class Points:
             return self.__find_closest_pair_bf()
         elif kind == "dnc":
             self.sort(0, self.get_point_count() - 1)
-            print("sorted")
-            self.view()
+            # print("sorted")
+            # self.view()
             return self.__find_closest_pair_dnc()
 
     def view(self):

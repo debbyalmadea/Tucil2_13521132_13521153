@@ -18,5 +18,9 @@ class Point:
         for i in range(self.dimension):
             self.set(i, random.randint(-constraint, constraint))
 
-    def get_value_between(self, other, axis=0):
-        return (self.get(axis) - other.get(axis)) / 2
+    def is_diff_within_distance(self, other, distance):
+        for i in range(self.dimension):
+            if abs(self.get(i) - other.get(i)) > distance:
+                return False
+
+        return True
