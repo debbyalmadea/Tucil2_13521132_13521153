@@ -1,8 +1,7 @@
-import points.points as p
+#import points.points as p
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
-from matplotlib import cm
 
 
 def changeToNumpy(points):
@@ -18,7 +17,8 @@ def changeToNumpy(points):
 def visualize(array, p1, p2): #ambah param point1, point2
     
     #Plotting points
-    ax = plt.figure().add_subplot(111, projection='3d')
+    
+    ax = plt.figure(figsize=(15,10)).add_subplot(111, projection='3d')
     x = array[:,0]
     y = array[:,1]
     z = array[:,2]
@@ -29,16 +29,20 @@ def visualize(array, p1, p2): #ambah param point1, point2
         if ( (x[i] == p1.get(0) and y[i] == p1.get(1) and z[i] == p1.get(2)) or (x[i] == p2.get(0) and y[i] == p2.get(1) and z[i] == p2.get(2)) ):
             ax.scatter(x[i], y[i], z[i], color = "red")
         else:
-            ax.scatter(x[i], y[i], z[i], color = "black")
+            ax.scatter(x[i], y[i], z[i], color = "green")
     
     #Modify Graph
     plt.xlabel("x")
     plt.ylabel("y")
     plt.clabel("z")
-    #ax.xaxis.label.set_color('red')
-    #ax.yaxis.label.set_color('blue')
-    #ax.w_xaxis.line.set_color("red")
-    #ax.w_yaxis.line.set_color("blue")
-    #ax.w_zaxis.line.set_color("green")
+    ax.xaxis.label.set_color('red')
+    ax.yaxis.label.set_color('blue')
+    ax.w_xaxis.line.set_color("red")
+    ax.w_yaxis.line.set_color("blue")
+    ax.w_zaxis.line.set_color("green")
+    ax.set_xlim3d([-1e9, 1e9])
+    ax.set_ylim3d([-1e9, 1e9])
+    ax.set_zlim3d([-1e9, 1e9])
+    
     #Show
     plt.show()
