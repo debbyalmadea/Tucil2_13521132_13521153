@@ -16,22 +16,29 @@ def changeToNumpy(points):
 
 def visualize(array, p1, p2): #ambah param point1, point2
     
-    #Plotting points
+    """
+    Plotting points
+    """
     
     ax = plt.figure(figsize=(15,10)).add_subplot(111, projection='3d')
     x = array[:,0]
     y = array[:,1]
     z = array[:,2]
     
-    #Setting biar point terdekat warnanya beda
+    """
+    Setting biar point terdekat warnanya beda
+    """
     arrlen = array.shape[0]
     for i in range(arrlen):
         if ( (x[i] == p1.get(0) and y[i] == p1.get(1) and z[i] == p1.get(2)) or (x[i] == p2.get(0) and y[i] == p2.get(1) and z[i] == p2.get(2)) ):
             ax.scatter(x[i], y[i], z[i], color = "red")
         else:
-            ax.scatter(x[i], y[i], z[i], color = "green")
+            ax.scatter(x[i], y[i], z[i], color = "gray")
     
-    #Modify Graph
+    """
+    Modify Graph
+    """
+    plt.title("Find Closest Distance 3D")
     plt.xlabel("x")
     plt.ylabel("y")
     plt.clabel("z")

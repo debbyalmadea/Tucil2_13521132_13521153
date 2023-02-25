@@ -32,7 +32,18 @@ if __name__ == "__main__":
     # print(ps1.get_point(4).get(2))
     # ps1.sort(0, ps1.get_point_count()-1)
     # Make throw exception
-
+    
+    computerSystem = {
+    'platform': platform.system(),
+    'platform-release': platform.release(),
+    'platform-version': platform.version(),
+    'architecture': platform.machine(),
+    'processor': platform.processor(),
+    #ram
+    }
+    
+    print("Computer Specification: ")
+    print(computerSystem)
     start = time.perf_counter()
     _min, p1, p2 = ps1.find_closest_pair()
     end = time.perf_counter()
@@ -51,7 +62,7 @@ if __name__ == "__main__":
     print(p1.coordinate)
     print(p2.coordinate)
     print("TIME", end - start)
-
-    # if (ps1.get_dimension() == 3):
-    #     pointArray = vs.changeToNumpy(ps1)
-    #     vs.visualize(pointArray, p1, p2)
+    
+    if (ps1.get_dimension() == 3):
+        pointArray = vs.changeToNumpy(ps1)
+        vs.visualize(pointArray, p1, p2)
