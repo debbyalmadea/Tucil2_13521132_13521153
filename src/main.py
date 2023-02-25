@@ -6,6 +6,7 @@ import visualizer.visualizer as vs
 import time
 
 if __name__ == "__main__":
+    CONSTRAINT = 1e9
     ps1 = ps.Points(3)
 
     # jangan dihapus buat debugging :333333
@@ -26,7 +27,7 @@ if __name__ == "__main__":
     # ps1.add(p7)
     # ps1.add(p8)
 
-    ps1.generate_random(256, 1000000)
+    ps1.generate_random(256, CONSTRAINT)
     # print("----------------------")
     # print(ps1.get_point(4).get(2))
     # ps1.sort(0, ps1.get_point_count()-1)
@@ -51,5 +52,6 @@ if __name__ == "__main__":
     print(p2.coordinate)
     print("TIME", end - start)
 
-    pointArray = vs.changeToNumpy(ps1)
-    vs.visualize(pointArray, p1, p2)
+    # if (ps1.get_dimension() == 3):
+    #     pointArray = vs.changeToNumpy(ps1)
+    #     vs.visualize(pointArray, p1, p2)

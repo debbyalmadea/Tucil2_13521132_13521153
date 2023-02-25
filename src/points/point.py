@@ -16,7 +16,7 @@ class Point:
 
     def generate_random(self, constraint):
         for i in range(self.dimension):
-            self.set(i, random.randint(-constraint, constraint))
+            self.set(i, random.uniform(-constraint, constraint))
 
     def is_diff_within_distance(self, other, distance):
         for i in range(self.dimension):
