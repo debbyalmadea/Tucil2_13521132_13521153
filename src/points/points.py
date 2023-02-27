@@ -214,7 +214,7 @@ class Points:
             finding closest pair of points using divide and conquer algorithm
         """
         if self.get_point_count() == 1:
-            return 1e10, self.get_point(0), self.get_point(0)
+            return 1e10, []
         elif self.get_point_count() == 2:
             # print("NORM")
             norm = la.norm(self.get_point(0), self.get_point(1))
