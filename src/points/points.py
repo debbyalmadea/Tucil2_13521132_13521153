@@ -76,10 +76,10 @@ class Points:
             partition used for quick sort
         """
         # get 1-3
-        pivot = self.get_point(highIdx).get(axis)  # Pivot x terakhir
+        pivot = self.get_point(highIdx)  # Pivot x terakhir
         i = lowIdx - 1
         for k in range(lowIdx, highIdx):
-            if self.get_point(k).get(axis) <= pivot:
+            if self.get_point(k).less_than_eq(pivot, axis):
                 i += 1
                 self.__points[i], self.__points[k] = self.__points[k], self.__points[i]
 
@@ -104,7 +104,6 @@ class Points:
             return index of first occurence of value in axis using binary search.
             if there is no value, return first occurence of element more than value
         """
-
         if (high >= low and low < self.__point_count):
             mid = low + (high - low) // 2
             if self.get_point(mid).get(axis) == value:
@@ -117,8 +116,6 @@ class Points:
                     return self.__search_fo(low, mid - 1, value, axis)
                 else:
                     return self.__search_fo(mid + 1, high, value, axis)
-        # print("===========FO NOT FOUND", low, high, "VALUE:", value)
-        # self.view()
 
         return low
 
@@ -131,7 +128,6 @@ class Points:
         """
         if (high >= low and high < self.__point_count):
             mid = low + (high - low) // 2
-            # print(self.__point_count, mid)
             if self.get_point(mid).get(axis) == value:
                 if mid == self.get_point_count() - 1 or self.get_point(mid + 1).get(axis) > value:
                     return mid
@@ -143,8 +139,6 @@ class Points:
                 else:
                     return self.__search_lo(mid + 1, high, value, axis)
 
-        # print("===========LO NOT FOUND", low, high, "VALUE:", value)
-        # self.view()
         return high
 
     def search(self, value, kind="first", axis=0):
@@ -164,12 +158,6 @@ class Points:
             2. array of integer size two representing start and end index of
                the second half of array points
         """
-        # left = Points(self.__dimension)
-        # right = Points(self.__dimension)
-        # left.set_points(
-        #     self.get_points_within_id(0, self.__point_count // 2 - 1))
-        # right.set_points(
-        #     self.get_points_within_id(self.__point_count // 2, self.__point_count - 1))
         left_sid = 0
         left_eid = self.__point_count // 2 - 1
         right_sid = self.__point_count // 2
@@ -183,77 +171,60 @@ class Points:
             from pseudo line from all axes
         """
         _min = distance
-        min_p1 = point.Point(self.__dimension)
-        min_p2 = point.Point(self.__dimension)
+        # min_p1 = point.Point(self.__dimension)
+        # min_p2 = point.Point(self.__dimension)
+        result = []
 
+        left_closest = self.get_point(left_id[1])
         right_closest = self.get_point(right_id[0])
-        # pseudo_line = left_closest.get(
-        #     axis) + abs(left_closest.get_value_between(right_closest))
-
-        # print("LEFT CLOSEST", left_closest.coordinate)
-        # print("RIGHT CLOSEST", right_closest.coordinate)
-        # print("PSEUDO LINE:", pseudo_line)
 
         gfl_id = self.search(
-            int(right_closest.get(0) - distance), kind="first")
-        # gfr_id = self.search(int(left_closest.get(0) + distance), kind="last")
+            right_closest.get(axis) - distance, kind="first")
 
         grey_l = Points(self.__dimension)
         grey_l.set_points(self.get_points_within_id(gfl_id, left_id[1]))
 
-        # grey_r = Points(self.__dimension)
-        # grey_r.set_points(self.get_points_within_id(right_id[0], gfr_id))
-
-        # print("=========GREY L")
-        # grey_l.view()
-        # print("GREY R")
-        # grey_r.view()
-        # print("DISTANCE")
-        # print(distance)
-        for _point in grey_l.__points:
-            # print("===================POINT")
-            # print(_point.coordinate)
-            grey_r_id = self.search(
-                int(_point.get(0) + _min), kind="last")
+        if grey_l.get_point_count() > 0:
+            gfr_id = self.search(left_closest.get(
+                axis) + distance, kind="last")
             grey_r = Points(self.__dimension)
-            grey_r.set_points(self.get_points_within_id(
-                right_id[0],  grey_r_id))
-            # print("TARGET END", grey_r_id)
-            # print("==========================TARGET")
-            for i in range(grey_r.__point_count):
-                if not grey_r.__points[i].is_diff_within_distance(_point, _min):
-                    continue
-                _norm = la.norm(_point, grey_r.__points[i])
-                # print(grey_r.__points[i].coordinate)
-                # print("NORM", _norm)
-                # print("MIN", _min)
-                if _norm < _min:
-                    _min = _norm
-                    min_p1 = grey_r.__points[i]
-                    min_p2 = _point
-            # _min_temp, min_p1_temp, min_p2_temp = grey_r.__find_closest_pair_with(
-            #     _point, _min)
-            # if _min_temp < _min:
-            #     _min = _min_temp
-            #     min_p1 = min_p1_temp
-            #     min_p2 = min_p2_temp
+            grey_r.set_points(self.get_points_within_id(right_id[0],  gfr_id))
 
-        return _min, min_p1, min_p2
+            for i in range(grey_l.__point_count):
+                _point = grey_l.get_point(grey_l.get_point_count() - i - 1)
+                for i in range(grey_r.__point_count):
+                    if not grey_r.__points[i].is_diff_within_distance(_point, _min):
+                        continue
+                    _norm = la.norm(_point, grey_r.__points[i])
+                    if _norm < _min:
+                        _min = _norm
+                        # min_p1 = grey_r.__points[i]
+                        # min_p2 = _point
+                        result = [[grey_r.__points[i], _point]]
+                    elif _norm == _min:
+                        result += [[grey_r.__points[i], _point]]
+
+        if len(result) > 0:
+            return _min, result
+        else:
+            return 1e10, []
 
     def __find_closest_pair_dnc(self):
         """
             finding closest pair of points using divide and conquer algorithm
         """
         if self.get_point_count() == 1:
-            return 2e9, self.get_point(0), self.get_point(0)
+            return 1e10, self.get_point(0), self.get_point(0)
         elif self.get_point_count() == 2:
             # print("NORM")
-
-            return la.norm(self.get_point(0), self.get_point(1)), self.get_point(0), self.get_point(1)
+            norm = la.norm(self.get_point(0), self.get_point(1))
+            # return norm, self.get_point(0), self.get_point(1)
+            return norm, [[self.get_point(0), self.get_point(1)]]
         else:
             _min = 0
-            _min_p1 = point.Point(self.__dimension)
-            _min_p2 = point.Point(self.__dimension)
+            # _min_p1 = point.Point(self.__dimension)
+            # _min_p2 = point.Point(self.__dimension)
+            result = []
 
             left_id, right_id = self.divide()
             left = Points(self.__dimension)
@@ -262,61 +233,65 @@ class Points:
             right = Points(self.__dimension)
             right.set_points(self.get_points_within_id(
                 right_id[0], right_id[1]))
-            # print("divided")
-            # print("left")
-            # left.view()
-            # print("right")
-            # right.view()
 
-            left_min, left_p1, left_p2 = left.__find_closest_pair_dnc()
-            right_min, right_p1, right_p2 = right.__find_closest_pair_dnc()
+            # left_min, left_p1, left_p2 = left.__find_closest_pair_dnc()
+            # right_min, right_p1, right_p2 = right.__find_closest_pair_dnc()
 
-            # print("left min", left_min)
-            # print(left_p1.coordinate, left_p2.coordinate)
-
-            # print("right min", right_min)
-            # print(right_p1.coordinate, right_p2.coordinate)
+            left_min, left_result = left.__find_closest_pair_dnc()
+            right_min, right_result = right.__find_closest_pair_dnc()
 
             if (left_min < right_min):
                 _min = left_min
-                _min_p1 = left_p1
-                _min_p2 = left_p2
-            else:
+                # _min_p1 = left_p1
+                # _min_p2 = left_p2
+                result = left_result
+            elif (left_min > right_min):
                 _min = right_min
-                _min_p1 = right_p1
-                _min_p2 = right_p2
+                # _min_p1 = right_p1
+                # _min_p2 = right_p2
+                result = right_result
+            else:
+                _min = left_min
+                result = left_result + right_result
 
-            _min_grey, min_p1_grey, min_p2_grey = self.__find_closest_pair_grey(
+            # _min_grey, min_p1_grey, min_p2_grey = self.__find_closest_pair_grey(
+            #     _min, left_id, right_id)
+
+            _min_grey, grey_result = self.__find_closest_pair_grey(
                 _min, left_id, right_id)
-
-            # print("grey min", _min_grey)
 
             if _min_grey < _min:
                 _min = _min_grey
-                _min_p1 = min_p1_grey
-                _min_p2 = min_p2_grey
+                # _min_p1 = min_p1_grey
+                # _min_p2 = min_p2_grey
+                result = grey_result
+            elif _min_grey == _min:
+                result += grey_result
 
-            return _min, _min_p1, _min_p2
+            # return _min, _min_p1, _min_p2
+            return _min, result
 
     def __find_closest_pair_bf(self):
         """
             finding closest pair of points using brute force algorithm
         """
-        _min = 2e9
-        _min_id = [-1, -1]
+        _min = 1e10
+        result = []
         for i in range(self.__point_count):
             for j in range(i + 1, self.__point_count):
                 _norm = la.norm(self.get_point(i), self.get_point(j))
                 if (_norm < _min):
                     _min = _norm
-                    _min_id = [i, j]
+                    result = [[self.get_point(i), self.get_point(j)]]
+                elif (_norm == _min):
+                    result += [[self.get_point(i), self.get_point(j)]]
 
-        return _min, self.get_point(_min_id[0]), self.get_point(_min_id[1])
+        return _min, result
 
     def find_closest_pair(self, kind="dnc"):
         """
             finding closest pair of points. parameter kind is the algorithm used.
-            default is "dnc" for divide and conquer, another one is "bf" for brute force
+            default is "dnc" for divide and conquer, another one is "bf" for brute force.
         """
         if kind == "bf":
             return self.__find_closest_pair_bf()
