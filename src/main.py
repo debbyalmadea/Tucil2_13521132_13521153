@@ -45,8 +45,9 @@ if __name__ == "__main__":
                             print("Do you want to visualize the data? y/n")
                             inputVisualize = input("Choice: ")
                             if (inputVisualize == "y"):
+                                fileName = input("Figure Name: ")
                                 print("Visualizing...")
-                                vs.visualize(_points, resultDNC)
+                                vs.visualize(_points, resultDNC, fileName)
                             elif (inputVisualize == "n"):
                                 print("Back to previous menu...")
                                 print("--------------------------------------")
@@ -101,8 +102,9 @@ if __name__ == "__main__":
                                 print("Do you want to visualize the data? y/n")
                                 inputVisualize = input("Choice: ")
                                 if (inputVisualize == "y"):
+                                    fileName = input("Figure Name: ")
                                     print("Visualizing...")
-                                    vs.visualize(_points, resultDNC)
+                                    vs.visualize(_points, resultDNC, fileName)
                                 elif (inputVisualize == "n"):
                                     print("Back to previous menu...")
                                     print(
