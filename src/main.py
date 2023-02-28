@@ -1,5 +1,6 @@
 import visualizer.visualizer as vs
-import output as op
+import utils.output as op
+import utils.input as ip
 import points.points as ps
 if __name__ == "__main__":
     start = True
@@ -26,17 +27,17 @@ if __name__ == "__main__":
                         CONSTRAINT = 1e9
                         _points = ps.Points(int(r_n))
                         _points.generate_random(int(countPoint), CONSTRAINT)
-                        _points, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.result(
+                        _points, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF = op.result(
                             _points)
                         op.printToTerminal(
-                            _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                            _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF)
 
                         toFile = input("Print to File? y/n ")
 
                         if (toFile == "y"):
                             fileName = input("File Name: ")
                             op.outputToFile(fileName, r_n, countPoint, _minDNC, resultDNC,
-                                            calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                                            calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF)
 
                         elif (toFile == "n"):
                             startPoint = False
@@ -71,20 +72,20 @@ if __name__ == "__main__":
                         findFile = False
                     else:
                         try:
-                            splitText, dimension, numberOfPoints = op.inputFile(
+                            splitText, dimension, numberOfPoints = ip.inputFile(
                                 inputFileName)
-                            _points = op.processPoints(
+                            _points = ip.processPoints(
                                 splitText, dimension, numberOfPoints)
-                            _points, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.result(
+                            _points, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF = op.result(
                                 _points)
                             op.printToTerminal(
-                                _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                                _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF)
                             toFile = input("Print to File? y/n ")
 
                             if (toFile == "y"):
                                 fileName = input("File Name: ")
                                 op.outputToFile(fileName, dimension, numberOfPoints, _minDNC,
-                                                resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                                                resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF)
 
                             elif (toFile == "n"):
                                 findFile = False

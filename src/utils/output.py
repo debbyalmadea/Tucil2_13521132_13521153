@@ -1,12 +1,8 @@
-import points.points as ps
 import platform
-import points.point as p
 import lib.linalg as la
-import visualizer.visualizer as vs
-import time
 import sys
 import colorama
-from colorama import Fore, Back, Style
+from colorama import Fore
 import psutil
 
 # To reset color
@@ -74,26 +70,29 @@ def result(_points):
     _minBF, resultBF, finalTimeBF = _points.find_closest_pair(kind="bf")
     calledBF = la.func_called
 
-    return _points, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF
+    return _points, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF
 
 
-def printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF):
+def printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF):
     print("")
     print(Fore.GREEN + "-----------------------------------------------------------------------------------------------")
     print(Fore.GREEN + "|  Algorithm  |     Minimum Distance       |      Time       |      Function Norm Called      |")
     print(Fore.GREEN + "-----------------------------------------------------------------------------------------------")
-    print(Fore.GREEN + "|    DNC      |         {:.2f}      |     {:.4f} ms       |             {}             |".format(
+    print(Fore.GREEN + "|    DNC      |         {:.2f}      |     {:.4f} s       |             {}             |".format(
         _minDNC, finalTimeDNC, calledDNC))
     print(Fore.GREEN + "-----------------------------------------------------------------------------------------------")
-    print(Fore.GREEN + "|    BF       |         {:.2f}      |     {:.4f} ms       |             {}             |".format(
+    print(Fore.GREEN + "|    BF       |         {:.2f}      |     {:.4f} s       |             {}             |".format(
         _minBF, finalTimeBF, calledBF))
     print(Fore.GREEN + "-----------------------------------------------------------------------------------------------")
     print("")
 
     print("")
+    print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+    print(Fore.CYAN + "|                                        Closest Pair DNC                                     |")
+    print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
     for i in range(len(resultDNC)):
         print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
-        print(Fore.CYAN + "|                                         Closest Pair {}                                      |".format(i+1))
+        print(Fore.CYAN + "|                                        Closest Pair {}                                      |".format(i+1))
         print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
         for j in range(len(resultDNC[i])):
             print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
@@ -101,86 +100,75 @@ def printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledB
             print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
     print("")
 
+    print("")
+    print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+    print(Fore.CYAN + "|                                        Closest Pair BF                                      |")
+    print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+    for i in range(len(resultBF)):
+        print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+        print(Fore.CYAN + "|                                        Closest Pair {}                                      |".format(i+1))
+        print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+        for j in range(len(resultBF[i])):
+            print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+            print(Fore.CYAN + "|{}|".format(resultBF[i][j].coordinate))
+            print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+    print("")
 
-def printToFile(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF):
+
+def printToFile(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF):
     print("")
     print("-----------------------------------------------------------------------------------------------")
     print("|  Algorithm  |     Minimum Distance       |      Time       |      Function Norm Called      |")
     print("-----------------------------------------------------------------------------------------------")
-    print("|    DNC      |         {:.2f}      |     {:.4f} ms       |             {}             |".format(
+    print("|    DNC      |         {:.2f}      |     {:.4f} s       |             {}             |".format(
         _minDNC, finalTimeDNC, calledDNC))
     print("-----------------------------------------------------------------------------------------------")
-    print("|    BF       |         {:.2f}      |     {:.4f} ms       |             {}             |".format(
+    print("|    BF       |         {:.2f}      |     {:.4f} s       |             {}             |".format(
         _minBF, finalTimeBF, calledBF))
     print("-----------------------------------------------------------------------------------------------")
     print("")
 
     print("")
+    print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+    print(Fore.CYAN + "|                                        Closest Pair DNC                                     |")
+    print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
     for i in range(len(resultDNC)):
-        print("-----------------------------------------------------------------------------------------------")
-        print("|                                         Closest Pair {}                                      |".format(i+1))
-        print("-----------------------------------------------------------------------------------------------")
+        print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+        print(Fore.CYAN + "|                                        Closest Pair {}                                      |".format(i+1))
+        print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
         for j in range(len(resultDNC[i])):
-            print("-----------------------------------------------------------------------------------------------")
-            print("|{}|".format(resultDNC[i][j].coordinate))
-            print("-----------------------------------------------------------------------------------------------")
+            print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+            print(Fore.CYAN + "|{}|".format(resultDNC[i][j].coordinate))
+            print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+    print("")
+
+    print("")
+    print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+    print(Fore.CYAN + "|                                        Closest Pair BF                                      |")
+    print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+    for i in range(len(resultBF)):
+        print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+        print(Fore.CYAN + "|                                        Closest Pair {}                                      |".format(i+1))
+        print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+        for j in range(len(resultBF[i])):
+            print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
+            print(Fore.CYAN + "|{}|".format(resultBF[i][j].coordinate))
+            print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
     print("")
 
 
-def inputFile(inputFileName):
-
-    f = open("../input/" + inputFileName + ".txt", "r")
-    readText = []
-    readText = f.read()
-    splitText = readText.splitlines()
-
-    dimension = int(splitText[0])
-    numberOfPoints = int(splitText[1])
-
-    count = len(splitText) - 2
-
-    if count != numberOfPoints:
-        raise Exception("Jumlah poin salah. Jumlah yang diharapkan:",
-                        numberOfPoints, "Jumlah yang diperoleh:", count)
-
-    # for i in range(2, len(splitText)):
-    for i in range(2, len(splitText)):
-        for j in range(dimension):
-            split = splitText[i].split()
-            if (len(split) != dimension):
-                raise Exception("Dimensi salah pada poin di line", i + 1)
-
-    f.close()
-    return splitText, dimension, numberOfPoints
-
-
-def processPoints(splitText, dimension, numberOfPoints):
-    hasil = [0 for i in range(numberOfPoints)]
-    for i in range(2, numberOfPoints+2):
-        hasil[i-2] = splitText[i].split()
-
-    for i in range(numberOfPoints):
-        for j in range(dimension):
-            hasil[i][j] = float(hasil[i][j])
-
-    ps1 = ps.Points(dimension)
-    for i in range(numberOfPoints-2):
-        ps1.add(p.Point(dimension, hasil[i]))
-    return ps1
-
-
-def outputToFile(outputFileName, dimension, pointCount, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF):
+def outputToFile(outputFileName, dimension, pointCount, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF):
     original_stdout = sys.stdout
     #path = sys.path[0]
     #joinPath = path.replace("src", "tc")
     #savePath = joinPath + fileName +".txt"
-    with open("../output/" + outputFileName+".txt", 'w') as f:
+    with open("output/" + outputFileName+".txt", 'w') as f:
         sys.stdout = f
         printPlatformToFile()
         print("Dimension: {}".format(dimension))
         print("n: {}".format(pointCount))
         printToFile(_minDNC, resultDNC, calledDNC,
-                    finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                    finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF)
 
         sys.stdout = original_stdout
 
