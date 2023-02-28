@@ -10,7 +10,7 @@ This program will help you find the closest pair in n-dimension space
 1. Python `--version 3.9.0`or above
 2. Matplotlib `--version 3.7.0`
 3. Colorama `--version 0.4.3` 
-4. psutil `--version 5.9.4
+4. psutil `--version 5.9.4`
 
 # Structure
 ```
@@ -85,5 +85,5 @@ Make sure to follow the file's format so that there are no errors
 ```
 
 # Author
-Dhanika Novlisariyanti - 13521132
-Made Debby Almadea Putri - 13521153
+[Dhanika Novlisariyanti](https://github.com/dhanikanovlisa) - 13521132
+[Made Debby Almadea Putri](https://github.com/debbyalmadea) - 13521153
