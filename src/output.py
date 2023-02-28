@@ -67,28 +67,6 @@ def printDash():
     print(Fore.RED + "-----------------------------------------------------------------------------------------------")
 
 
-def resultFromInputFile(dimension, numberofPoint, parts):
-
-    ps1 = ps.Points(dimension)
-    for i in range(numberofPoint-2):
-        ps1.add(p.Point(dimension, parts[i]))
-
-    startTimeDNC = time.perf_counter()
-    _minDNC, resultDNC = ps1.find_closest_pair()
-    endTimeDNC = time.perf_counter()
-    calledDNC = la.func_called
-    finalTimeDNC = endTimeDNC - startTimeDNC
-
-    la.func_called = 0
-    startTimeBF = time.perf_counter()
-    _minBF, resultBF = ps1.find_closest_pair(kind="bf")
-    endTimeBF = time.perf_counter()
-    calledBF = la.func_called
-    finalTimeBF = endTimeBF - startTimeBF
-
-    return ps1, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF
-
-
 def result(_points):
     _minDNC, resultDNC, finalTimeDNC = _points.find_closest_pair()
     calledDNC = la.func_called
