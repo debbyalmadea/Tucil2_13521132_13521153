@@ -9,11 +9,12 @@ import colorama
 from colorama import Fore, Back, Style
 import psutil
 
-#To reset color
+# To reset color
 colorama.init(autoreset=True)
 
+
 def printWelcome():
-        print(Fore.YELLOW + """
+    print(Fore.YELLOW + """
                    __        __       .__
           /  \    /  \ ____ |  |   ____  ____   _____   ____
           \   \/\/   // __ \|  | _/ ___\/  _ \ /     \_/ __ /
@@ -21,8 +22,9 @@ def printWelcome():
             \__/\  /  \___  >____/\___  >____/|__|_|  /\___  >
                 \/       \/          \/            \/     \/
               """)
-        print()
-        
+    print()
+
+
 def printPlatform():
     print("""
             Here is your computer specification:
@@ -34,80 +36,83 @@ def printPlatform():
             'ram': {} GB
             """.format(platform.system(), platform.release(), platform.version(), platform.machine(), platform.processor(), (psutil.virtual_memory()[0]/1000000000)))
 
+
 def printPlatformToFile():
     print("Here is your computer specification:")
     print("'platform': {}.format(plattform.system())")
     print("'platform-release': {}".format(platform.release()))
     print("'architecture': {}".format(platform.machine()))
-    print("'processor': {}".format(platform.processor((psutil.virtual_memory()[0]/1000000000))))
+    print("'processor': {}".format(platform.processor(
+        (psutil.virtual_memory()[0]/1000000000))))
     print("'ram': {} GB".format())
     print("")
 
+
 def printMenu():
     print("")
-    print(Fore.LIGHTGREEN_EX + "------------------------------------------Menu-------------------------------------------------")
-    print(Fore.LIGHTGREEN_EX + "|1. Randomize Points                                                                          |")
-    print(Fore.LIGHTGREEN_EX + "|2. Input File                                                                                |")
-    print(Fore.LIGHTGREEN_EX + "|3. Exit                                                                                      |")
-    print(Fore.LIGHTGREEN_EX + "-----------------------------------------------------------------------------------------------")
+    print(Fore.LIGHTGREEN_EX +
+          "------------------------------------------Menu-------------------------------------------------")
+    print(Fore.LIGHTGREEN_EX +
+          "|1. Randomize Points                                                                          |")
+    print(Fore.LIGHTGREEN_EX +
+          "|2. Input File                                                                                |")
+    print(Fore.LIGHTGREEN_EX +
+          "|3. Exit                                                                                      |")
+    print(Fore.LIGHTGREEN_EX +
+          "-----------------------------------------------------------------------------------------------")
     print("")
+
 
 def printDash():
     print(Fore.RED + "-----------------------------------------------------------------------------------------------")
-     
+
+
 def resultFromInputFile(dimension, numberofPoint, parts):
 
     ps1 = ps.Points(dimension)
     for i in range(numberofPoint-2):
         ps1.add(p.Point(dimension, parts[i]))
-    
-    startTimeDNC = time.perf_counter()
-    _minDNC, resultDNC = ps1.find_closest_pair()
-    endTimeDNC = time.perf_counter()
-    calledDNC = la.func_called
-    finalTimeDNC = endTimeDNC - startTimeDNC
-    
-    la.func_called = 0
-    startTimeBF = time.perf_counter()
-    _minBF, resultBF = ps1.find_closest_pair(kind="bf")
-    endTimeBF = time.perf_counter()
-    calledBF = la.func_called
-    finalTimeBF = endTimeBF - startTimeBF
-    
-    return ps1, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF 
-    
-     
-def result(r_n, countPoint):
-    CONSTRAINT = 1e9
-    ps1 = ps.Points(int(r_n))
-    ps1.generate_random(int(countPoint), CONSTRAINT)
 
     startTimeDNC = time.perf_counter()
     _minDNC, resultDNC = ps1.find_closest_pair()
     endTimeDNC = time.perf_counter()
     calledDNC = la.func_called
     finalTimeDNC = endTimeDNC - startTimeDNC
-    
+
     la.func_called = 0
     startTimeBF = time.perf_counter()
     _minBF, resultBF = ps1.find_closest_pair(kind="bf")
     endTimeBF = time.perf_counter()
     calledBF = la.func_called
     finalTimeBF = endTimeBF - startTimeBF
-    
-    return ps1, _minDNC,resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF 
+
+    return ps1, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF
+
+
+def result(_points):
+    _minDNC, resultDNC, finalTimeDNC = _points.find_closest_pair()
+    calledDNC = la.func_called
+
+    la.func_called = 0
+    _minBF, resultBF, finalTimeBF = _points.find_closest_pair(kind="bf")
+    calledBF = la.func_called
+
+    return _points, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF
+
 
 def printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF):
     print("")
     print(Fore.GREEN + "-----------------------------------------------------------------------------------------------")
-    print(Fore.GREEN +"|  Algorithm  |     Minimum Distance       |      Time       |      Function Norm Called      |")
-    print(Fore.GREEN +"-----------------------------------------------------------------------------------------------")   
-    print(Fore.GREEN +"|    DNC      |         {:.2f}      |     {:.4f} ms       |             {}             |".format(_minDNC, finalTimeDNC, calledDNC))
-    print(Fore.GREEN +"-----------------------------------------------------------------------------------------------")
-    print(Fore.GREEN +"|    BF       |         {:.2f}      |     {:.4f} ms       |             {}             |".format(_minBF, finalTimeBF, calledBF))
-    print(Fore.GREEN +"-----------------------------------------------------------------------------------------------")
+    print(Fore.GREEN + "|  Algorithm  |     Minimum Distance       |      Time       |      Function Norm Called      |")
+    print(Fore.GREEN + "-----------------------------------------------------------------------------------------------")
+    print(Fore.GREEN + "|    DNC      |         {:.2f}      |     {:.4f} ms       |             {}             |".format(
+        _minDNC, finalTimeDNC, calledDNC))
+    print(Fore.GREEN + "-----------------------------------------------------------------------------------------------")
+    print(Fore.GREEN + "|    BF       |         {:.2f}      |     {:.4f} ms       |             {}             |".format(
+        _minBF, finalTimeBF, calledBF))
+    print(Fore.GREEN + "-----------------------------------------------------------------------------------------------")
     print("")
-    
+
     print("")
     for i in range(len(resultDNC)):
         print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
@@ -119,17 +124,20 @@ def printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledB
             print(Fore.CYAN + "-----------------------------------------------------------------------------------------------")
     print("")
 
+
 def printToFile(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF):
     print("")
     print("-----------------------------------------------------------------------------------------------")
     print("|  Algorithm  |     Minimum Distance       |      Time       |      Function Norm Called      |")
-    print("-----------------------------------------------------------------------------------------------")   
-    print("|    DNC      |         {:.2f}      |     {:.4f} ms       |             {}             |".format(_minDNC, finalTimeDNC, calledDNC))
     print("-----------------------------------------------------------------------------------------------")
-    print("|    BF       |         {:.2f}      |     {:.4f} ms       |             {}             |".format(_minBF, finalTimeBF, calledBF))
+    print("|    DNC      |         {:.2f}      |     {:.4f} ms       |             {}             |".format(
+        _minDNC, finalTimeDNC, calledDNC))
+    print("-----------------------------------------------------------------------------------------------")
+    print("|    BF       |         {:.2f}      |     {:.4f} ms       |             {}             |".format(
+        _minBF, finalTimeBF, calledBF))
     print("-----------------------------------------------------------------------------------------------")
     print("")
-    
+
     print("")
     for i in range(len(resultDNC)):
         print("-----------------------------------------------------------------------------------------------")
@@ -140,58 +148,64 @@ def printToFile(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, f
             print("|{}|".format(resultDNC[i][j].coordinate))
             print("-----------------------------------------------------------------------------------------------")
     print("")
-    
+
 
 def inputFile(inputFileName):
-    
+
     f = open(inputFileName+".txt", "r")
     readText = []
     readText = f.read()
     splitText = readText.splitlines()
 
-    
     dimension = int(splitText[0])
     numberOfPoints = int(splitText[1])
-    
+
     count = len(splitText) - 2
-    
+
     if count != numberOfPoints:
-        raise Exception("Jumlah poin salah. Jumlah yang diharapkan:", numberOfPoints, "Jumlah yang diperoleh:", count)
-    
-    #for i in range(2, len(splitText)):
+        raise Exception("Jumlah poin salah. Jumlah yang diharapkan:",
+                        numberOfPoints, "Jumlah yang diperoleh:", count)
+
+    # for i in range(2, len(splitText)):
     for i in range(2, len(splitText)):
         for j in range(dimension):
             split = splitText[i].split()
             if (len(split) != dimension):
                 raise Exception("Dimensi salah pada poin di line", i + 1)
-       
 
     return splitText, dimension, numberOfPoints
+
 
 def processPoints(splitText, dimension, numberOfPoints):
     hasil = [0 for i in range(numberOfPoints)]
     for i in range(2, numberOfPoints+2):
         hasil[i-2] = splitText[i].split()
-        
+
     for i in range(numberOfPoints):
         for j in range(dimension):
             hasil[i][j] = float(hasil[i][j])
-    
-    return hasil
-   
+
+    ps1 = ps.Points(dimension)
+    for i in range(numberOfPoints-2):
+        ps1.add(p.Point(dimension, hasil[i]))
+    return ps1
+
+
 def outputToFile(outputFileName, dimension, pointCount, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF):
     original_stdout = sys.stdout
     #path = sys.path[0]
     #joinPath = path.replace("src", "tc")
     #savePath = joinPath + fileName +".txt"
     with open(outputFileName+".txt", 'w') as f:
-        sys.stdout = f 
+        sys.stdout = f
         printPlatformToFile()
         print("Dimension: {}".format(dimension))
         print("n: {}".format(pointCount))
-        printToFile(_minDNC,resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
-        
-        sys.stdout = original_stdout 
+        printToFile(_minDNC, resultDNC, calledDNC,
+                    finalTimeDNC, _minBF, calledBF, finalTimeBF)
+
+        sys.stdout = original_stdout
+
 
 def printGoodbye():
     print(Fore.YELLOW + """
