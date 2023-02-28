@@ -58,5 +58,5 @@ def visualize(points, pairedPoints, fileName): #ambah param point1, point2
     # ax.set_zlim3d([-1e9, 1e9])
     
     #Show
-    plt.savefig('../output/' + fileName)
+    plt.savefig('output/' + fileName)
     plt.show()
