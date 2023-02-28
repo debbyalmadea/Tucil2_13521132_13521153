@@ -17,6 +17,7 @@ class Point:
     def generate_random(self, constraint):
         """
         menghasilkan koordinat secara random (double)
+        dengan batas -constraint hingga constraint (inklusif)
         """
         for i in range(self.dimension):
             self.set(i, random.uniform(-constraint, constraint))

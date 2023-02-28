@@ -1,12 +1,6 @@
-import points.points as ps
-import platform
-import points.point as p
-import lib.linalg as la
 import visualizer.visualizer as vs
-import time
-import colorama
 import output as op
-
+import points.points as ps
 if __name__ == "__main__":
     start = True
     while (start):
@@ -17,36 +11,42 @@ if __name__ == "__main__":
         op.printDash()
 
         if (inputMenu == "1"):
-            
+
             startPoint = True
-            
+
             while (startPoint):
-                
+
                 print("Input dimension or type 'e' to go back to menu")
                 r_n = input("Dimension size: ")
-                
+
                 if (r_n.isdigit()):
                     countPoint = input("Input n points: ")
 
                     if (countPoint.isdigit() and int(countPoint) > 1):
-                        ps1, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.result(r_n, countPoint)
-                        op.printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
-                        
+                        CONSTRAINT = 1e9
+                        _points = ps.Points(int(r_n))
+                        _points.generate_random(int(countPoint), CONSTRAINT)
+                        _points, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.result(
+                            _points)
+                        op.printToTerminal(
+                            _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+
                         toFile = input("Print to File? y/n ")
-                        
+
                         if (toFile == "y"):
                             fileName = input("File Name: ")
-                            op.outputToFile(fileName,r_n, countPoint, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
-                        
+                            op.outputToFile(fileName, r_n, countPoint, _minDNC, resultDNC,
+                                            calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+
                         elif (toFile == "n"):
                             startPoint = False
-                            
+
                         if(int(r_n) == 3):
                             print("Do you want to visualize the data? y/n")
                             inputVisualize = input("Choice: ")
                             if (inputVisualize == "y"):
                                 print("Visualizing...")
-                                vs.visualize(ps1, resultDNC)
+                                vs.visualize(_points, resultDNC)
                             elif (inputVisualize == "n"):
                                 print("Back to previous menu...")
                                 print("--------------------------------------")
@@ -58,61 +58,66 @@ if __name__ == "__main__":
 
                 elif (not r_n.isdigit() and r_n != "e"):
                     print("Please input double only")
-                
+
                 elif (r_n == "e"):
                     startPoint = False
         elif (inputMenu == "2"):
             findFile = True
             while (findFile):
                 try:
-                    inputFileName = input("Please input filename or type 'e' to return to previous menu: ")
+                    inputFileName = input(
+                        "Please input filename or type 'e' to return to previous menu: ")
                     if (inputFileName == "e"):
                         findFile = False
                     else:
                         try:
-                            splitText, dimension, numberOfPoints = op.inputFile(inputFileName)
-                            parts = op.processPoints(splitText, dimension, numberOfPoints)
-                            ps1, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.resultFromInputFile(dimension, numberOfPoints, parts)
-                            op.printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                            splitText, dimension, numberOfPoints = op.inputFile(
+                                inputFileName)
+                            _points = op.processPoints(
+                                splitText, dimension, numberOfPoints)
+                            _points, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.result(
+                                _points)
+                            op.printToTerminal(
+                                _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
                             toFile = input("Print to File? y/n ")
-                            
+
                             if (toFile == "y"):
                                 fileName = input("File Name: ")
-                                op.outputToFile(fileName, dimension, numberOfPoints, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
-                            
+                                op.outputToFile(fileName, dimension, numberOfPoints, _minDNC,
+                                                resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+
                             elif (toFile == "n"):
                                 findFile = False
-                            
+
                             if(dimension == 3):
                                 print("Do you want to visualize the data? y/n")
                                 inputVisualize = input("Choice: ")
                                 if (inputVisualize == "y"):
                                     print("Visualizing...")
-                                    vs.visualize(ps1, resultDNC)
+                                    vs.visualize(_points, resultDNC)
                                 elif (inputVisualize == "n"):
                                     print("Back to previous menu...")
-                                    print("--------------------------------------")
+                                    print(
+                                        "--------------------------------------")
                                 else:
                                     print("Please input between y or n")
-                                    print("--------------------------------------")
+                                    print(
+                                        "--------------------------------------")
                         except Exception as err:
                             print(err.args)
-                
+
                 except FileNotFoundError:
                     print("File not found")
-            
-    
+
         elif (inputMenu == "3"):
             op.printGoodbye()
             start = False
         else:
             print("The option is between 1 or 2")
 
-            
-            
     #CONSTRAINT = 1e9
     #ps1 = ps.Points(3)
- 
+
     # jangan dihapus buat debugging :333333
     # p1 = p.Point(3, [0,0,1])
     # p2 = p.Point(3, [0,0,4])
@@ -156,8 +161,8 @@ if __name__ == "__main__":
     # print(p2.coordinate)
     # print("FUNC NORM CALLED:", la.func_called)
     # print("TIME", end - start)
-    
-    #for i in range(len(result)):
+
+    # for i in range(len(result)):
     #    for j in range(len(result[i])):
     #        print(result[i][j].get(j))
 
