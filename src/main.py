@@ -2,6 +2,8 @@ import visualizer.visualizer as vs
 import utils.output as op
 import utils.input as ip
 import points.points as ps
+
+
 if __name__ == "__main__":
     start = True
     while (start):
@@ -33,27 +35,37 @@ if __name__ == "__main__":
 
                         toFile = input("Print to File? y/n ")
 
-                        if (toFile == "y"):
+                        while toFile != "y" and toFile != "Y" and toFile != "n" and toFile != "N":
+                            print("Please input between y or n")
+                            print(
+                                "--------------------------------------")
+                            toFile = input("Print to File? y/n ")
+
+                        if (toFile == "y" or toFile == "Y"):
                             fileName = input("File Name: ")
                             op.outputToFile(fileName, r_n, countPoint, _minDNC, resultDNC,
                                             calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF)
 
-                        elif (toFile == "n"):
-                            startPoint = False
+                        elif (toFile == "n" or toFile == "N"):
+                            findFile = False
 
                         if(int(r_n) == 3):
                             print("Do you want to visualize the data? y/n")
                             inputVisualize = input("Choice: ")
-                            if (inputVisualize == "y"):
+                            while inputVisualize != "y" and inputVisualize != "Y" and inputVisualize != "n" and inputVisualize != "N":
+                                print("Please input between y or n")
+                                print(
+                                    "--------------------------------------")
+                                inputVisualize = input("Choice: ")
+
+                            if (inputVisualize == "y" or inputVisualize == "Y"):
                                 fileName = input("Figure Name: ")
                                 print("Visualizing...")
                                 vs.visualize(_points, resultDNC, fileName)
-                            elif (inputVisualize == "n"):
+                            elif (inputVisualize == "n" or inputVisualize != "N"):
                                 print("Back to previous menu...")
-                                print("--------------------------------------")
-                            else:
-                                print("Please input between y or n")
-                                print("--------------------------------------")
+                                print(
+                                    "--------------------------------------")
                     elif (countPoint.isdigit() and int(countPoint) > 10000):
                         print("Too many points. Maximum points are 10000")
                     elif (countPoint.isdigit() and int(countPoint) <= 1):
@@ -90,27 +102,33 @@ if __name__ == "__main__":
                                 _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF)
                             toFile = input("Print to File? y/n ")
 
-                            if (toFile == "y"):
+                            while toFile != "y" or toFile != "Y" or toFile != "n" or toFile != "N":
+                                print("Please input between y or n")
+                                print(
+                                    "--------------------------------------")
+                                toFile = input("Print to File? y/n ")
+                            if (toFile == "y" or toFile == "Y"):
                                 fileName = input("File Name: ")
                                 op.outputToFile(fileName, dimension, numberOfPoints, _minDNC,
                                                 resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF)
 
-                            elif (toFile == "n"):
+                            elif (toFile == "n" or toFile == "N"):
                                 findFile = False
 
                             if(dimension == 3):
                                 print("Do you want to visualize the data? y/n")
                                 inputVisualize = input("Choice: ")
-                                if (inputVisualize == "y"):
+                                while inputVisualize != "y" or inputVisualize != "Y" or inputVisualize != "n" or inputVisualize != "N":
+                                    print("Please input between y or n")
+                                    print(
+                                        "--------------------------------------")
+                                    inputVisualize = input("Choice: ")
+                                if (inputVisualize == "y" or inputVisualize == "Y"):
                                     fileName = input("Figure Name: ")
                                     print("Visualizing...")
                                     vs.visualize(_points, resultDNC, fileName)
-                                elif (inputVisualize == "n"):
+                                elif (inputVisualize == "n" or inputVisualize == "N"):
                                     print("Back to previous menu...")
-                                    print(
-                                        "--------------------------------------")
-                                else:
-                                    print("Please input between y or n")
                                     print(
                                         "--------------------------------------")
                         except Exception as err:
@@ -128,8 +146,8 @@ if __name__ == "__main__":
         else:
             print("The option is between 1 or 2")
 
-    #CONSTRAINT = 1e9
-    #ps1 = ps.Points(3)
+    # CONSTRAINT = 1e9
+    # ps1 = ps.Points(3)
 
     # jangan dihapus buat debugging :333333
     # p1 = p.Point(3, [0,0,1])
@@ -149,13 +167,13 @@ if __name__ == "__main__":
     # ps1.add(p7)
     # ps1.add(p8)
 
-    #ps1.generate_random(128, CONSTRAINT)
+    # ps1.generate_random(128, CONSTRAINT)
     # print("----------------------")
     # print(ps1.get_point(4).get(2))
     # ps1.sort(0, ps1.get_point_count()-1)
     # Make throw exception
     # start = time.perf_counter()
-    #_min,resultDNC = ps1.find_closest_pair()
+    # _min,resultDNC = ps1.find_closest_pair()
     # end = time.perf_counter()
     # print("==============BY DNC")
     # print(_min)
