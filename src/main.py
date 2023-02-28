@@ -74,7 +74,6 @@ if __name__ == "__main__":
                             parts = op.processPoints(splitText, dimension, numberOfPoints)
                             ps1, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.resultFromInputFile(dimension, numberOfPoints, parts)
                             op.printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
-                            vs.visualize(ps1, resultDNC)
                             toFile = input("Print to File? y/n ")
                             
                             if (toFile == "y"):
@@ -83,8 +82,21 @@ if __name__ == "__main__":
                             
                             elif (toFile == "n"):
                                 findFile = False
-                        except:
-                            print("Konfigurasi file salah")
+                            
+                            if(dimension == 3):
+                                print("Do you want to visualize the data? y/n")
+                                inputVisualize = input("Choice: ")
+                                if (inputVisualize == "y"):
+                                    print("Visualizing...")
+                                    vs.visualize(ps1, resultDNC)
+                                elif (inputVisualize == "n"):
+                                    print("Back to previous menu...")
+                                    print("--------------------------------------")
+                                else:
+                                    print("Please input between y or n")
+                                    print("--------------------------------------")
+                        except Exception as err:
+                            print(err.args)
                 
                 except FileNotFoundError:
                     print("File not found")

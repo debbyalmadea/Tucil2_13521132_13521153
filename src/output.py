@@ -148,25 +148,22 @@ def inputFile(inputFileName):
     readText = []
     readText = f.read()
     splitText = readText.splitlines()
-    toNumber = [0 for i in range(len(splitText))]
+
     
-    for i in range(len(splitText)):
-        toNumber[i] = splitText[i]
-    
-    dimension = int(toNumber[0])
-    numberOfPoints = int(toNumber[1])
+    dimension = int(splitText[0])
+    numberOfPoints = int(splitText[1])
     
     count = len(splitText) - 2
     
     if count != numberOfPoints:
-        raise Exception("Jumlah poin ada yg salah", count, numberOfPoints)
+        raise Exception("Jumlah poin salah. Jumlah yang diharapkan:", numberOfPoints, "Jumlah yang diperoleh:", count)
     
     #for i in range(2, len(splitText)):
     for i in range(2, len(splitText)):
         for j in range(dimension):
             split = splitText[i].split()
-            if (len(split) > dimension):
-                raise Exception("Dimensi salah")
+            if (len(split) != dimension):
+                raise Exception("Dimensi salah pada poin di line", i + 1)
        
 
     return splitText, dimension, numberOfPoints
