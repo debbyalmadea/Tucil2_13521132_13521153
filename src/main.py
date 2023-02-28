@@ -22,7 +22,6 @@ if __name__ == "__main__":
 
                 if (r_n.isdigit()):
                     countPoint = input("Input n points: ")
-
                     if (countPoint.isdigit() and int(countPoint) > 1):
                         CONSTRAINT = 1e9
                         _points = ps.Points(int(r_n))
@@ -54,7 +53,7 @@ if __name__ == "__main__":
                             else:
                                 print("Please input between y or n")
                                 print("--------------------------------------")
-                    elif (countPoint.isdigit() and countPoint == "1"):
+                    elif (countPoint.isdigit() and int(countPoint) <= 1):
                         print("Please input more than one points")
 
                 elif (not r_n.isdigit() and r_n != "e"):
@@ -62,6 +61,8 @@ if __name__ == "__main__":
 
                 elif (r_n == "e"):
                     startPoint = False
+
+                print("")
         elif (inputMenu == "2"):
             findFile = True
             while (findFile):
@@ -105,7 +106,10 @@ if __name__ == "__main__":
                                     print(
                                         "--------------------------------------")
                         except Exception as err:
-                            print(err.args)
+                            print(err)
+                            print("")
+                        except:
+                            print("Konfigurasi file salah")
 
                 except FileNotFoundError:
                     print("File not found")
