@@ -63,6 +63,9 @@ def printDash():
 
 
 def result(_points):
+    """
+    mencari closest pair
+    """
     la.func_called = 0
     _minDNC, resultDNC, finalTimeDNC = _points.find_closest_pair()
     calledDNC = la.func_called
@@ -160,9 +163,6 @@ def printToFile(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, c
 
 def outputToFile(outputFileName, dimension, pointCount, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF):
     original_stdout = sys.stdout
-    #path = sys.path[0]
-    #joinPath = path.replace("src", "tc")
-    #savePath = joinPath + fileName +".txt"
     with open("output/" + outputFileName+".txt", 'w') as f:
         sys.stdout = f
         printPlatformToFile()

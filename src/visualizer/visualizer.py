@@ -13,23 +13,15 @@ def isPointResult(point, result):
     return False
 
 
-def visualize(points, pairedPoints, fileName):  # ambah param point1, point2
+def visualize(points, pairedPoints, fileName):
     """
     Plotting points
     """
-    colorArr = ["red", "blue", "green", "cyan", "yellow"]
+    colorArr = ["red", "blue", "green", "cyan", "yellow",
+                "orange", "green", "purple", "pink"]
     colorId = 0
     ax = plt.figure(figsize=(15, 10)).add_subplot(111, projection='3d')
 
-    """
-    Setting biar point terdekat warnanya beda
-    """
-    # arrlen = points.shape[0]
-    '''for i in range(arrlen):
-        if ((x[i] == p1.get(0) and y[i] == p1.get(1) and z[i] == p1.get(2)) or (x[i] == p2.get(0) and y[i] == p2.get(1) and z[i] == p2.get(2)) ):
-            ax.scatter(x[i], y[i], z[i], color = "red")
-        else:
-            ax.scatter(x[i], y[i], z[i], color = "gray")'''
     for i in range(points.get_point_count()):
         _point = points.get_point(i)
         if isPointResult(_point, pairedPoints):
@@ -59,9 +51,6 @@ def visualize(points, pairedPoints, fileName):  # ambah param point1, point2
     ax.w_xaxis.line.set_color("red")
     ax.w_yaxis.line.set_color("blue")
     ax.w_zaxis.line.set_color("green")
-    # ax.set_xlim3d([-1e9, 1e9])
-    # ax.set_ylim3d([-1e9, 1e9])
-    # ax.set_zlim3d([-1e9, 1e9])
 
     # Show
     plt.savefig('output/' + fileName)

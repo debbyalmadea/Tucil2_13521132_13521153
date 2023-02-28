@@ -52,6 +52,9 @@ def processPoints(splitText, dimension, numberOfPoints):
     for i in range(numberOfPoints):
         for j in range(dimension):
             hasil[i][j] = float(hasil[i][j])
+            if hasil[i][j] > 1e9:
+                raise Exception(
+                    "Incorrect File configuration: There is a point with more than 1e9 value")
 
     ps1 = ps.Points(dimension)
     for i in range(numberOfPoints-2):
