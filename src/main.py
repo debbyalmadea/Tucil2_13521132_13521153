@@ -20,9 +20,9 @@ if __name__ == "__main__":
                 print("Input dimension or type 'e' to go back to menu")
                 r_n = input("Dimension size: ")
 
-                if (r_n.isdigit()):
+                if (r_n.isdigit() and int(r_n) <= 100):
                     countPoint = input("Input n points: ")
-                    if (countPoint.isdigit() and int(countPoint) > 1):
+                    if (countPoint.isdigit() and int(countPoint) > 1 and int(countPoint) <= 10000):
                         CONSTRAINT = 1e9
                         _points = ps.Points(int(r_n))
                         _points.generate_random(int(countPoint), CONSTRAINT)
@@ -53,12 +53,18 @@ if __name__ == "__main__":
                             else:
                                 print("Please input between y or n")
                                 print("--------------------------------------")
+                    elif (countPoint.isdigit() and int(countPoint) > 10000):
+                        print("Too many points. Maximum points are 10000")
                     elif (countPoint.isdigit() and int(countPoint) <= 1):
                         print("Please input more than one points")
+                    elif (not countPoint.isdigit()):
+                        print("Please input positive integer only")
 
                 elif (not r_n.isdigit() and r_n != "e"):
-                    print("Please input double only")
+                    print("Please input positive integer only")
 
+                elif (r_n != "e" and int(r_n) > 100):
+                    print("Too many dimension. Keep it under 100")
                 elif (r_n == "e"):
                     startPoint = False
 
@@ -109,7 +115,7 @@ if __name__ == "__main__":
                             print(err)
                             print("")
                         except:
-                            print("Konfigurasi file salah")
+                            print("Incorrect File configuration")
 
                 except FileNotFoundError:
                     print("File not found")

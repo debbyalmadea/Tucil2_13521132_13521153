@@ -10,22 +10,23 @@ def inputFile(inputFileName):
     splitText = readText.splitlines()
 
     if len(splitText) < 2:
-        raise Exception("Konfigurasi file salah")
+        raise Exception("Incorrect File configuration")
 
     dimension = int(splitText[0])
     if dimension > 100:
         raise Exception(
-            "Konfigurasi file salah: Dimensi di atas 100, terlalu besar")
+            "Incorrect File configuration: Dimension greater than 100. Too big")
 
     numberOfPoints = int(splitText[1])
     if numberOfPoints < 2:
-        raise Exception("Konfigurasi file salah: Jumlah titik kurang dari 2")
+        raise Exception(
+            "Incorrect File configuration: Number of points are less than 2")
 
     count = len(splitText) - 2
 
     if count != numberOfPoints:
-        raise Exception("Konfigurasi file salah: Jumlah titik salah. Jumlah yang diharapkan: " +
-                        str(numberOfPoints) + ". Jumlah yang diperoleh: " + str(count))
+        raise Exception("Incorrect File configuration: Unmatched number of points. Expected: " +
+                        str(numberOfPoints) + ". Obtained: " + str(count))
 
     # for i in range(2, len(splitText)):
     for i in range(2, len(splitText)):
@@ -33,7 +34,7 @@ def inputFile(inputFileName):
             split = splitText[i].split()
             if (len(split) != dimension):
                 raise Exception(
-                    "Konfigurasi file salah: Dimensi salah pada titik di line " + str(i + 1))
+                    "Incorrect File configuration: Incorrect dimension for point in line " + str(i + 1))
 
     f.close()
     return splitText, dimension, numberOfPoints
