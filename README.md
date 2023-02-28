@@ -58,7 +58,7 @@ This program will help you find the closest pair in n-dimension space
 1. Clone this github
 2. Make sure you are in the root directory
 3. Make sure you have installed all the requirements needed
-4. For Windows, run with  `py src/main.py`
+4. For Windows, run with  `py src/main.py` or `python src/main.py`
 5. For UNIX, run with `python3 src/main.py`
 
 # File Input Format
@@ -86,4 +86,5 @@ Make sure to follow the file's format so that there are no errors
 
 # Author
 [Dhanika Novlisariyanti](https://github.com/dhanikanovlisa) - 13521132
+
 [Made Debby Almadea Putri](https://github.com/debbyalmadea) - 13521153
