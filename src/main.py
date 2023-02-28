@@ -102,7 +102,7 @@ if __name__ == "__main__":
                                 _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, resultBF, calledBF, finalTimeBF)
                             toFile = input("Print to File? y/n ")
 
-                            while toFile != "y" or toFile != "Y" or toFile != "n" or toFile != "N":
+                            while toFile != "y" and toFile != "Y" and toFile != "n" and toFile != "N":
                                 print("Please input between y or n")
                                 print(
                                     "--------------------------------------")
@@ -118,7 +118,7 @@ if __name__ == "__main__":
                             if(dimension == 3):
                                 print("Do you want to visualize the data? y/n")
                                 inputVisualize = input("Choice: ")
-                                while inputVisualize != "y" or inputVisualize != "Y" or inputVisualize != "n" or inputVisualize != "N":
+                                while inputVisualize != "y" and inputVisualize != "Y" and inputVisualize != "n" and inputVisualize != "N":
                                     print("Please input between y or n")
                                     print(
                                         "--------------------------------------")

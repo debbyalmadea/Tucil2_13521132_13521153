@@ -1,22 +1,25 @@
 
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import axes3d
+
 
 def isPointResult(point, result):
+    """
+    mengembalikan true jika point ada di dalam result
+    """
     for i in range(len(result)):
         if point.is_equal(result[i][0]) or point.is_equal(result[i][1]):
             return True
-    
+
     return False
 
-def visualize(points, pairedPoints, fileName): #ambah param point1, point2
-    
+
+def visualize(points, pairedPoints, fileName):  # ambah param point1, point2
     """
     Plotting points
     """
     colorArr = ["red", "blue", "green", "cyan", "yellow"]
     colorId = 0
-    ax = plt.figure(figsize=(15,10)).add_subplot(111, projection='3d')
+    ax = plt.figure(figsize=(15, 10)).add_subplot(111, projection='3d')
 
     """
     Setting biar point terdekat warnanya beda
@@ -32,11 +35,14 @@ def visualize(points, pairedPoints, fileName): #ambah param point1, point2
         if isPointResult(_point, pairedPoints):
             continue
         else:
-            ax.scatter(_point.get(0), _point.get(1), _point.get(2), color = "gray")
-            
+            ax.scatter(_point.get(0), _point.get(
+                1), _point.get(2), color="gray")
+
     for i in range(len(pairedPoints)):
-        ax.scatter(pairedPoints[i][0].get(0), pairedPoints[i][0].get(1), pairedPoints[i][0].get(2), color = colorArr[colorId])
-        ax.scatter(pairedPoints[i][1].get(0), pairedPoints[i][1].get(1), pairedPoints[i][1].get(2), color = colorArr[colorId])
+        ax.scatter(pairedPoints[i][0].get(0), pairedPoints[i][0].get(
+            1), pairedPoints[i][0].get(2), color=colorArr[colorId])
+        ax.scatter(pairedPoints[i][1].get(0), pairedPoints[i][1].get(
+            1), pairedPoints[i][1].get(2), color=colorArr[colorId])
         if colorId == len(colorArr) - 1:
             colorId = 0
         else:
@@ -56,7 +62,7 @@ def visualize(points, pairedPoints, fileName): #ambah param point1, point2
     # ax.set_xlim3d([-1e9, 1e9])
     # ax.set_ylim3d([-1e9, 1e9])
     # ax.set_zlim3d([-1e9, 1e9])
-    
-    #Show
+
+    # Show
     plt.savefig('output/' + fileName)
     plt.show()

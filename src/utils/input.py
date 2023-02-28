@@ -3,10 +3,13 @@ import points.point as p
 
 
 def inputFile(inputFileName):
-
+    """
+    membaca input dari file
+    """
     f = open("input/" + inputFileName + ".txt", "r")
     readText = []
     readText = f.read()
+    f.close()
     splitText = readText.splitlines()
 
     if len(splitText) < 2:
@@ -28,7 +31,6 @@ def inputFile(inputFileName):
         raise Exception("Incorrect File configuration: Unmatched number of points. Expected: " +
                         str(numberOfPoints) + ". Obtained: " + str(count))
 
-    # for i in range(2, len(splitText)):
     for i in range(2, len(splitText)):
         for j in range(dimension):
             split = splitText[i].split()
@@ -36,11 +38,13 @@ def inputFile(inputFileName):
                 raise Exception(
                     "Incorrect File configuration: Incorrect dimension for point in line " + str(i + 1))
 
-    f.close()
     return splitText, dimension, numberOfPoints
 
 
 def processPoints(splitText, dimension, numberOfPoints):
+    """
+    mengubah input array of integer menjadi points
+    """
     hasil = [0 for i in range(numberOfPoints)]
     for i in range(2, numberOfPoints+2):
         hasil[i-2] = splitText[i].split()
