@@ -71,3 +71,10 @@ class Point:
                 return False
 
         return True
+    
+    def is_equal(self, other):
+        for i in range(self.dimension):
+            if self.get(i) != other.get(i):
+                return False
+        
+        return True

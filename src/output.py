@@ -74,7 +74,7 @@ def resultFromInputFile(dimension, numberofPoint, parts):
     calledBF = la.func_called
     finalTimeBF = endTimeBF - startTimeBF
     
-    return _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF 
+    return ps1, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF 
     
      
 def result(r_n, countPoint):
@@ -95,7 +95,7 @@ def result(r_n, countPoint):
     calledBF = la.func_called
     finalTimeBF = endTimeBF - startTimeBF
     
-    return _minDNC,resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF 
+    return ps1, _minDNC,resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF 
 
 def printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF):
     print("")
@@ -147,20 +147,41 @@ def inputFile(inputFileName):
     f = open(inputFileName+".txt", "r")
     readText = []
     readText = f.read()
-    splitText = readText.split()
+    splitText = readText.splitlines()
     toNumber = [0 for i in range(len(splitText))]
     
     for i in range(len(splitText)):
-        toNumber[i] = float(splitText[i])
+        toNumber[i] = splitText[i]
     
     dimension = int(toNumber[0])
     numberOfPoints = int(toNumber[1])
     
-    split_points = [i for i in range(2, (numberOfPoints * dimension)-1, dimension)]
-    parts = [toNumber[ind:ind + dimension] for ind in split_points]
+    count = len(splitText) - 2
     
-    return dimension, numberOfPoints, parts
+    if count != numberOfPoints:
+        raise Exception("Jumlah poin ada yg salah", count, numberOfPoints)
     
+    #for i in range(2, len(splitText)):
+    for i in range(2, len(splitText)):
+        for j in range(dimension):
+            split = splitText[i].split()
+            if (len(split) > dimension):
+                raise Exception("Dimensi salah")
+       
+
+    return splitText, dimension, numberOfPoints
+
+def processPoints(splitText, dimension, numberOfPoints):
+    hasil = [0 for i in range(numberOfPoints)]
+    for i in range(2, numberOfPoints+2):
+        hasil[i-2] = splitText[i].split()
+        
+    for i in range(numberOfPoints):
+        for j in range(dimension):
+            hasil[i][j] = float(hasil[i][j])
+    
+    return hasil
+   
 def outputToFile(outputFileName, dimension, pointCount, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF):
     original_stdout = sys.stdout
     #path = sys.path[0]

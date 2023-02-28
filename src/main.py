@@ -8,16 +8,15 @@ import colorama
 import output as op
 
 if __name__ == "__main__":
-
     start = True
     while (start):
         op.printWelcome()
         op.printPlatform()
         op.printMenu()
-        inputMenu = int(input("Choice: "))
+        inputMenu = input("Choice: ")
         op.printDash()
 
-        if (inputMenu == 1):
+        if (inputMenu == "1"):
             
             startPoint = True
             
@@ -29,8 +28,8 @@ if __name__ == "__main__":
                 if (r_n.isdigit()):
                     countPoint = input("Input n points: ")
 
-                    if (countPoint.isdigit()):
-                        _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.result(r_n, countPoint)
+                    if (countPoint.isdigit() and int(countPoint) > 1):
+                        ps1, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.result(r_n, countPoint)
                         op.printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
                         
                         toFile = input("Print to File? y/n ")
@@ -42,24 +41,27 @@ if __name__ == "__main__":
                         elif (toFile == "n"):
                             startPoint = False
                             
-                        """if(int(r_n) == 3):
+                        if(int(r_n) == 3):
                             print("Do you want to visualize the data? y/n")
                             inputVisualize = input("Choice: ")
                             if (inputVisualize == "y"):
                                 print("Visualizing...")
+                                vs.visualize(ps1, resultDNC)
                             elif (inputVisualize == "n"):
                                 print("Back to previous menu...")
                                 print("--------------------------------------")
                             else:
                                 print("Please input between y or n")
-                                print("--------------------------------------")"""
+                                print("--------------------------------------")
+                    elif (countPoint.isdigit() and countPoint == "1"):
+                        print("Please input more than one points")
 
                 elif (not r_n.isdigit() and r_n != "e"):
                     print("Please input double only")
                 
                 elif (r_n == "e"):
                     startPoint = False
-        elif (inputMenu == 2):
+        elif (inputMenu == "2"):
             findFile = True
             while (findFile):
                 try:
@@ -67,37 +69,43 @@ if __name__ == "__main__":
                     if (inputFileName == "e"):
                         findFile = False
                     else:
-                        dimension, numberofPoint, parts = op.inputFile(inputFileName)
-                        _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.resultFromInputFile(dimension, numberofPoint, parts)
-                        op.printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
-                        toFile = input("Print to File? y/n ")
-                        
-                        if (toFile == "y"):
-                            fileName = input("File Name: ")
-                            op.outputToFile(fileName, dimension, numberofPoint, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
-                        
-                        elif (toFile == "n"):
-                            findFile = False
+                        try:
+                            splitText, dimension, numberOfPoints = op.inputFile(inputFileName)
+                            parts = op.processPoints(splitText, dimension, numberOfPoints)
+                            ps1, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.resultFromInputFile(dimension, numberOfPoints, parts)
+                            op.printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                            vs.visualize(ps1, resultDNC)
+                            toFile = input("Print to File? y/n ")
+                            
+                            if (toFile == "y"):
+                                fileName = input("File Name: ")
+                                op.outputToFile(fileName, dimension, numberOfPoints, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                            
+                            elif (toFile == "n"):
+                                findFile = False
+                        except:
+                            print("Konfigurasi file salah")
                 
                 except FileNotFoundError:
                     print("File not found")
             
     
-        elif (inputMenu == 3):
+        elif (inputMenu == "3"):
             op.printGoodbye()
             start = False
         else:
             print("The option is between 1 or 2")
-            
-            
-    # CONSTRAINT = 1e9
-    # ps1 = ps.Points(3)
 
+            
+            
+    #CONSTRAINT = 1e9
+    #ps1 = ps.Points(3)
+ 
     # jangan dihapus buat debugging :333333
-    # p1 = p.Point(3, [-10, 8, 8])
-    # p2 = p.Point(3, [-5, -9, 4])
-    # p3 = p.Point(3, [-4, -3, 1])
-    # p4 = p.Point(3, [3, 6, -2])
+    # p1 = p.Point(3, [0,0,1])
+    # p2 = p.Point(3, [0,0,4])
+    # p3 = p.Point(3, [0,0,2])
+    # p4 = p.Point(3, [0,0,3])
     # p5 = p.Point(3, [5, 9, 0])
     # p6 = p.Point(3, [6, -6, -2])
     # p7 = p.Point(3, [6, 3, 4])
@@ -111,13 +119,13 @@ if __name__ == "__main__":
     # ps1.add(p7)
     # ps1.add(p8)
 
-    # ps1.generate_random(1000, CONSTRAINT)
+    #ps1.generate_random(128, CONSTRAINT)
     # print("----------------------")
     # print(ps1.get_point(4).get(2))
     # ps1.sort(0, ps1.get_point_count()-1)
     # Make throw exception
     # start = time.perf_counter()
-    # _min, p1, p2 = ps1.find_closest_pair()
+    #_min,resultDNC = ps1.find_closest_pair()
     # end = time.perf_counter()
     # print("==============BY DNC")
     # print(_min)
@@ -142,5 +150,4 @@ if __name__ == "__main__":
     #        print(result[i][j].get(j))
 
     # if (ps1.get_dimension() == 3):
-    #    pointArray = vs.changeToNumpy(ps1)
-    #    vs.visualize(pointArray, p1, p2)
+    #    vs.visualize(ps1, resultDNC)
