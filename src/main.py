@@ -30,14 +30,14 @@ if __name__ == "__main__":
                     countPoint = input("Input n points: ")
 
                     if (countPoint.isdigit()):
-                        _minDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.result(r_n, countPoint)
-                        op.printToTerminal(_minDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                        _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.result(r_n, countPoint)
+                        op.printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
                         
                         toFile = input("Print to File? y/n ")
                         
                         if (toFile == "y"):
                             fileName = input("File Name: ")
-                            op.outputToFile(fileName,r_n, countPoint, _minDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                            op.outputToFile(fileName,r_n, countPoint, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
                         
                         elif (toFile == "n"):
                             startPoint = False
@@ -60,8 +60,29 @@ if __name__ == "__main__":
                 elif (r_n == "e"):
                     startPoint = False
         elif (inputMenu == 2):
-                pass
-        
+            findFile = True
+            while (findFile):
+                try:
+                    inputFileName = input("Please input filename or type 'e' to return to previous menu: ")
+                    if (inputFileName == "e"):
+                        findFile = False
+                    else:
+                        dimension, numberofPoint, parts = op.inputFile(inputFileName)
+                        _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF = op.resultFromInputFile(dimension, numberofPoint, parts)
+                        op.printToTerminal(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                        toFile = input("Print to File? y/n ")
+                        
+                        if (toFile == "y"):
+                            fileName = input("File Name: ")
+                            op.outputToFile(fileName, dimension, numberofPoint, _minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, finalTimeBF)
+                        
+                        elif (toFile == "n"):
+                            findFile = False
+                
+                except FileNotFoundError:
+                    print("File not found")
+            
+    
         elif (inputMenu == 3):
             op.printGoodbye()
             start = False
@@ -115,6 +136,10 @@ if __name__ == "__main__":
     # print(p2.coordinate)
     # print("FUNC NORM CALLED:", la.func_called)
     # print("TIME", end - start)
+    
+    #for i in range(len(result)):
+    #    for j in range(len(result[i])):
+    #        print(result[i][j].get(j))
 
     # if (ps1.get_dimension() == 3):
     #    pointArray = vs.changeToNumpy(ps1)
