@@ -63,6 +63,7 @@ def printDash():
 
 
 def result(_points):
+    la.func_called = 0
     _minDNC, resultDNC, finalTimeDNC = _points.find_closest_pair()
     calledDNC = la.func_called
 
