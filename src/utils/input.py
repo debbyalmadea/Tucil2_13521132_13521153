@@ -16,6 +16,9 @@ def inputFile(inputFileName):
         raise Exception("Incorrect File configuration")
 
     dimension = int(splitText[0])
+    if dimension <= 0:
+        raise Exception(
+            "Incorrect File configuration: Dimension must be at least 1")
     if dimension > 100:
         raise Exception(
             "Incorrect File configuration: Dimension greater than 100. Too big")
@@ -25,6 +28,9 @@ def inputFile(inputFileName):
         raise Exception(
             "Incorrect File configuration: Number of points are less than 2")
 
+    if numberOfPoints > 10000:
+        raise Exception(
+            "Incorrect File configuration: Maximum number of points are 10000")
     count = len(splitText) - 2
 
     if count != numberOfPoints:
@@ -55,6 +61,9 @@ def processPoints(splitText, dimension, numberOfPoints):
             if hasil[i][j] > 1e9:
                 raise Exception(
                     "Incorrect File configuration: There is a point with more than 1e9 value")
+            if hasil[i][j] < -1e9:
+                raise Exception(
+                    "Incorrect File configuration: There is a point with less than -1e9 value")
 
     ps1 = ps.Points(dimension)
     for i in range(numberOfPoints-2):

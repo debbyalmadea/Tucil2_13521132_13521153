@@ -22,7 +22,7 @@ if __name__ == "__main__":
                 print("Input dimension or type 'e' to go back to menu")
                 r_n = input("Dimension size: ")
 
-                if (r_n.isdigit() and int(r_n) <= 100):
+                if (r_n.isdigit() and int(r_n) > 0 and int(r_n) <= 100):
                     countPoint = input("Input n points: ")
                     if (countPoint.isdigit() and int(countPoint) > 1 and int(countPoint) <= 10000):
                         CONSTRAINT = 1e9
@@ -78,6 +78,8 @@ if __name__ == "__main__":
 
                 elif (r_n != "e" and int(r_n) > 100):
                     print("Too many dimension. Keep it under 100")
+                elif (r_n.isdigit() and int(r_n) <= 0):
+                    print("Please input positive integer only")
                 elif (r_n == "e"):
                     startPoint = False
 
