@@ -1,24 +1,6 @@
-#import points.points as p
-import numpy as np
+
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
-
-
-def pointsToNumpy(points):
-    pointsArray = [[0 for j in range(3)] for i in range(points.get_point_count())]
-    for i in range(0, points.get_point_count()-1):
-        for j in range(0,3):
-            pointsArray[i][j] = points.get_point(i).get(j)
-
-    return pointsArray
-
-def pointToNumpy(point):
-    pointArray = [[i for i in range(2)]for j in range(len(point))]
-    for i in range(len(point)):
-        for j in range(2):
-            pointArray[i][j] = point[i][j].coordinate  
-            
-    return pointArray
 
 def isPointResult(point, result):
     for i in range(len(result)):
@@ -35,15 +17,6 @@ def visualize(points, pairedPoints, fileName): #ambah param point1, point2
     colorArr = ["red", "blue", "green", "cyan", "yellow"]
     colorId = 0
     ax = plt.figure(figsize=(15,10)).add_subplot(111, projection='3d')
-    # x = points[:,0]
-    # y = points[:,1]
-    # z = points[:,2]
-    
-    # match = []
-    # for i in range(len(pairedPoints) * 3):
-    #     for j in range(2):
-    #         for k in range(3):
-    #             match[i] = pairedPoints[i][j][k]
 
     """
     Setting biar point terdekat warnanya beda
@@ -60,13 +33,7 @@ def visualize(points, pairedPoints, fileName): #ambah param point1, point2
             continue
         else:
             ax.scatter(_point.get(0), _point.get(1), _point.get(2), color = "gray")
-        # for j in range(2):
-            # for k in range(3):
-            #     if((x[i] == pairedPoints[i][j][k] and y[i] == pairedPoints[i][j][k] and z[i] == pairedPoints[i][j][k]) or (x[i] == pairedPoints[i][j][k] and y[i] == pairedPoints[i][1][1] and z[i]==pairedPoints[i][1][2])):
-            #         ax.scatter(x[i], y[i], z[i], color = "red")
-                
-            #     else: 
-            #         ax.scatter(x[i], y[i], z[i], color = "gray")
+            
     for i in range(len(pairedPoints)):
         ax.scatter(pairedPoints[i][0].get(0), pairedPoints[i][0].get(1), pairedPoints[i][0].get(2), color = colorArr[colorId])
         ax.scatter(pairedPoints[i][1].get(0), pairedPoints[i][1].get(1), pairedPoints[i][1].get(2), color = colorArr[colorId])
