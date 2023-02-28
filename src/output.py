@@ -42,9 +42,8 @@ def printPlatformToFile():
     print("'platform': {}.format(plattform.system())")
     print("'platform-release': {}".format(platform.release()))
     print("'architecture': {}".format(platform.machine()))
-    print("'processor': {}".format(platform.processor(
-        (psutil.virtual_memory()[0]/1000000000))))
-    print("'ram': {} GB".format())
+    print("'processor': {}".format(platform.processor()))
+    print("'ram': {} GB".format(psutil.virtual_memory()[0]/1000000000))
     print("")
 
 
@@ -130,7 +129,7 @@ def printToFile(_minDNC, resultDNC, calledDNC, finalTimeDNC, _minBF, calledBF, f
 
 def inputFile(inputFileName):
 
-    f = open(inputFileName+".txt", "r")
+    f = open("../input/" + inputFileName + ".txt", "r")
     readText = []
     readText = f.read()
     splitText = readText.splitlines()
@@ -151,6 +150,7 @@ def inputFile(inputFileName):
             if (len(split) != dimension):
                 raise Exception("Dimensi salah pada poin di line", i + 1)
 
+    f.close()
     return splitText, dimension, numberOfPoints
 
 
@@ -174,7 +174,7 @@ def outputToFile(outputFileName, dimension, pointCount, _minDNC, resultDNC, call
     #path = sys.path[0]
     #joinPath = path.replace("src", "tc")
     #savePath = joinPath + fileName +".txt"
-    with open(outputFileName+".txt", 'w') as f:
+    with open("../output/" + outputFileName+".txt", 'w') as f:
         sys.stdout = f
         printPlatformToFile()
         print("Dimension: {}".format(dimension))
@@ -183,6 +183,8 @@ def outputToFile(outputFileName, dimension, pointCount, _minDNC, resultDNC, call
                     finalTimeDNC, _minBF, calledBF, finalTimeBF)
 
         sys.stdout = original_stdout
+
+        f.close()
 
 
 def printGoodbye():
